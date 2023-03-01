@@ -19,17 +19,17 @@ const createUser = async (req, res) => {
       email: req.body.email,
       hash,
     });
-    console.log("created user is: ", createdUser);
+    // console.log("created user is: ", createdUser);
     res.json({ status: "okay", message: "user created" });
   } catch (error) {
-    console.log("PUT /users/create", error);
+    // console.log("PUT /users/create", error);
     res.status(400).json({ status: "error", message: "an error has occurred" });
   }
 };
 
 // Login (not protected)
 const login = async (req, res) => {
-  console.log(req);
+  // console.log(req);
   try {
     const user = await Users.findOne({ email: req.body.email });
     if (!user) {
@@ -39,7 +39,7 @@ const login = async (req, res) => {
     }
 
     const result = await bcrypt.compare(req.body.password, user.hash);
-    console.log(result);
+    // console.log(result);
     if (!result) {
       return res.status(401).json({ status: "error", message: "login failed" });
     }
@@ -61,7 +61,7 @@ const login = async (req, res) => {
     const response = { access, refresh };
     res.json(response);
   } catch (error) {
-    console.log("POST /users/login", error);
+    // console.log("POST /users/login", error);
     res.status(400).json({ status: "error", message: "login failed" });
   }
 };
@@ -81,14 +81,14 @@ const refresh = (req, res) => {
     const response = { access };
     res.json(response);
   } catch (error) {
-    console.log("POST /users/refresh", error);
+    // console.log("POST /users/refresh", error);
     res.status(401).json({ status: "error", message: "unauthorised" });
   }
 };
 
 // Get all users (auth)
 const getUsers = async (req, res) => {
-  console.log("req.decoded: " + req.decoded);
+  // console.log("req.decoded: " + req.decoded);
   const users = await Users.find().select("email");
   res.json(users);
 };
@@ -99,13 +99,13 @@ const getUser = async (req, res) => {
     const user = await Users.findOne({ email: req.decoded.email });
 
     if (!user) {
-      console.log("user not found");
+      // console.log("user not found");
       return res.json({ status: "error", message: "user not found" });
     }
     user.hash = undefined;
     res.json(user);
   } catch (error) {
-    console.log("POST /users/user", error);
+    // console.log("POST /users/user", error);
     res.status(400).json({ status: "error", message: "an error has occurred" });
   }
 };
@@ -125,7 +125,7 @@ const deleteUser = async (req, res) => {
           .json({ status: "error", message: "user not found in database" });
       }
     } catch (error) {
-      console.log("DEL /users/delete", error);
+      // console.log("DEL /users/delete", error);
       res
         .status(400)
         .json({ status: "error", message: "an error has occurred" });

@@ -3,6 +3,9 @@ const express = require("express");
 const cors = require("cors");
 const connectDB = require("./db/db");
 const router = express.Router();
+const dotenv = require("dotenv");
+const request = require("request");
+const port = 4000;
 
 const {
   login,
@@ -21,6 +24,13 @@ const {
   createAdmin,
   deleteAdmin,
 } = require("./controllers/restaurantAdmin");
+
+const {
+  spotifyLogin,
+  spotifyCallback,
+  spotifyToken,
+  playSong,
+} = require("./controllers/spotify");
 
 const { getPlaylist, updatePlaylist } = require("./controllers/playlist");
 const { getAccountHistory } = require("./controllers/accountHistory");
@@ -61,4 +71,12 @@ router.get("/admin", auth, getAdmin);
 router.get("/admin/profile", auth, getAnAdmin);
 router.delete("/admin", auth, deleteAdmin);
 
-app.listen(3001);
+// spotifyplayer
+router.get("/auth/login", spotifyLogin);
+router.get("/auth/callback", spotifyCallback);
+router.get("/auth/token", spotifyToken);
+router.get("/populate", playSong);
+
+app.listen(port, () => {
+  console.log(`Listening at http://localhost:${port}`);
+});

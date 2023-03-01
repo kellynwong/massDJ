@@ -26,10 +26,10 @@ const main = async () => {
     seedUsers[x]["hash"] = await bcrypt.hash(seedUsers[x]["password"], 12);
     delete seedUsers[x]["password"];
   }
-  console.log(seedUsers);
+  // console.log(seedUsers);
 
   await Users.insertMany(seedUsers);
-  console.log("Created some users!");
+  // console.log("Created some users!");
 };
 const run = async () => {
   await main();

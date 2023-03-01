@@ -40,7 +40,7 @@ const main = async () => {
   ];
 
   await Playlist.insertMany(seedSongs);
-  console.log("Created some songs!");
+  // console.log("Created some songs!");
 };
 const run = async () => {
   await main();

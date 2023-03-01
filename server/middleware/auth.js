@@ -3,15 +3,14 @@ require("dotenv").config();
 const jwt = require("jsonwebtoken");
 
 const auth = (req, res, next) => {
-  console.log("req.header: " + req.headers);
   const token = req.headers["authorization"].replace("Bearer ", "");
-  console.log("token replacing bearer: " + token);
+  // console.log("token replacing bearer: " + token);
 
   if (token) {
     try {
       const decoded = jwt.verify(token, process.env.ACCESS_SECRET);
       req.decoded = decoded;
-      console.log("decoded: " + decoded);
+      // console.log("decoded: " + decoded);
       next();
     } catch (error) {
       return res.status(401).send({

@@ -29,10 +29,10 @@ const main = async () => {
     );
     delete seedRestaurantAdmin[x]["password"];
   }
-  console.log(seedRestaurantAdmin);
+  // console.log(seedRestaurantAdmin);
 
   await RestaurantAdmin.insertMany(seedRestaurantAdmin);
-  console.log("Created some restaurant admin!");
+  // console.log("Created some restaurant admin!");
 };
 const run = async () => {
   await main();

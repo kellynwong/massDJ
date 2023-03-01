@@ -19,17 +19,17 @@ const createAdmin = async (req, res) => {
       email: req.body.email,
       hash,
     });
-    console.log("created admin is: ", createdAdmin);
+    // console.log("created admin is: ", createdAdmin);
     res.json({ status: "okay", message: "admin created" });
   } catch (error) {
-    console.log("PUT /admin/create", error);
+    // console.log("PUT /admin/create", error);
     res.status(400).json({ status: "error", message: "an error has occurred" });
   }
 };
 
 // Login (not protected)
 const adminLogin = async (req, res) => {
-  console.log(req);
+  // console.log(req);
   try {
     const admin = await RestaurantAdmin.findOne({ email: req.body.email });
     if (!admin) {
@@ -39,7 +39,7 @@ const adminLogin = async (req, res) => {
     }
 
     const result = await bcrypt.compare(req.body.password, admin.hash);
-    console.log(result);
+    // console.log(result);
     if (!result) {
       return res.status(401).json({ status: "error", message: "login failed" });
     }
@@ -61,7 +61,7 @@ const adminLogin = async (req, res) => {
     const response = { access, refresh };
     res.json(response);
   } catch (error) {
-    console.log("POST /admin/login", error);
+    // console.log("POST /admin/login", error);
     res.status(400).json({ status: "error", message: "login failed" });
   }
 };
@@ -81,14 +81,14 @@ const adminRefresh = (req, res) => {
     const response = { access };
     res.json(response);
   } catch (error) {
-    console.log("POST /admin/refresh", error);
+    // console.log("POST /admin/refresh", error);
     res.status(401).json({ status: "error", message: "unauthorised" });
   }
 };
 
 // Get all admin (auth)
 const getAdmin = async (req, res) => {
-  console.log("req.decoded: " + req.decoded);
+  // console.log("req.decoded: " + req.decoded);
   const admin = await RestaurantAdmin.find().select("email");
   res.json(admin);
 };
@@ -99,13 +99,13 @@ const getAnAdmin = async (req, res) => {
     const admin = await RestaurantAdmin.findOne({ email: req.decoded.email });
 
     if (!admin) {
-      console.log("admin not found");
+      // console.log("admin not found");
       return res.json({ status: "error", message: "admin not found" });
     }
     admin.hash = undefined;
     res.json(admin);
   } catch (error) {
-    console.log("POST /admin/admin", error);
+    //console.log("POST /admin/admin", error);
     res.status(400).json({ status: "error", message: "an error has occurred" });
   }
 };
@@ -125,7 +125,7 @@ const deleteAdmin = async (req, res) => {
           .json({ status: "error", message: "admin not found in database" });
       }
     } catch (error) {
-      console.log("DEL /admin/delete", error);
+      // console.log("DEL /admin/delete", error);
       res
         .status(400)
         .json({ status: "error", message: "an error has occurred" });

@@ -9,7 +9,7 @@ const getPlaylist = async (req, res) => {
 
 // When user clicks on upvote or downvote
 const updatePlaylist = async (req, res) => {
-  console.log(req.body);
+  // console.log(req.body);
   try {
     const response = await Playlist.updateOne(
       { _id: req.body.id },
@@ -20,7 +20,7 @@ const updatePlaylist = async (req, res) => {
         $push: { votedBy: req.decoded.email },
       }
     );
-    console.log(response);
+    // console.log(response);
 
     res.json({ status: "ok", message: "updated" });
   } catch (error) {

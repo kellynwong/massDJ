@@ -32,7 +32,7 @@ const main = async () => {
   ];
 
   await AccountHistory.insertMany(seedHistory);
-  console.log("Created some history!");
+  // console.log("Created some history!");
 };
 const run = async () => {
   await main();

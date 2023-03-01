@@ -1,10 +1,12 @@
 import React, { useState } from "react";
 
-function Login() {
+function AdminLogin() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [data, setData] = useState("");
-  const [users, setUsers] = useState([]);
+  const [admin, setAdmin] = useState([]);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isError, setIsError] = useState(false);
 
   const handleSubmit = async (e) => {
     console.log(JSON.stringify({ email, password }));
@@ -14,11 +16,14 @@ function Login() {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, password }),
     };
-    const url = "http://127.0.0.1:3001/users/login";
+    const url = "http://127.0.0.1:4000/admin/login";
     const res = await fetch(url, requestOptions);
     const data = await res.json();
     setData(data);
     console.log(data);
+    if (data.message === "not authorised") {
+      setIsError(true);
+    }
   };
 
   const handleClick = async () => {
@@ -30,46 +35,18 @@ function Login() {
         Authorization: `Bearer ${token}`,
       },
     };
-    const url = "http://127.0.0.1:3001/users";
+    const url = "http://127.0.0.1:4000/admin";
     const res = await fetch(url, requestOptions);
-    const users = await res.json();
-    setUsers(users);
-    console.log(users);
+    const admin = await res.json();
+    setAdmin(admin);
+    console.log(admin);
   };
 
   return (
     <>
       <div>
         <form onSubmit={handleSubmit}>
-          <h3 className="font-extrabold">User Log In</h3>
-
-          <label>Email:</label>
-          <input
-            type="email"
-            onChange={(e) => setEmail(e.target.value)}
-            value={email}
-            className="rounded-md border-2 mr-8"
-          />
-          <label>Password:</label>
-          <input
-            type="password"
-            onChange={(e) => setPassword(e.target.value)}
-            value={password}
-            className="rounded-md border-2 mr-8"
-          />
-          <button className="rounded-md border-2">Log In</button>
-        </form>
-
-        <button type="submit" value="Update" onClick={handleClick}>
-          For Testing User Log In: Get All Users
-        </button>
-        {/* <h5>{users[0].email}</h5> */}
-      </div>
-
-      <div className="mt-16 ">
-        <form onSubmit={handleSubmit}>
           <h3 className="font-extrabold">Restaurant Admin Log In</h3>
-
           <label>Email:</label>
           <input
             type="email"
@@ -84,16 +61,24 @@ function Login() {
             value={password}
             className="rounded-md border-2 mr-8"
           />
+
           <button className="rounded-md border-2">Log In</button>
         </form>
-
-        {/* <button type="submit" value="Update" onClick={handleClick}>
-          For Testing User Log In: Get All Users
+        <div className="font-extrabold mt-4 mb-4">
+          {isLoggedIn && "Admin Successfully Logged In!"}
+        </div>
+        <button
+          className="rounded-md border-2 mt-4 w-80"
+          type="submit"
+          value="Update"
+          onClick={handleClick}
+        >
+          For Testing Admin Log In: Get All Admin
         </button>
-        <h5>{users[0].email}</h5> */}
+        {/* <h5>{admin[0].email}</h5> */}
       </div>
     </>
   );
 }
 
-export default Login;
+export default AdminLogin;
