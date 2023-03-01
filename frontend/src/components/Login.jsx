@@ -38,30 +38,61 @@ function Login() {
   };
 
   return (
-    <div>
-      <form className="login" onSubmit={handleSubmit}>
-        <h3>Log In</h3>
+    <>
+      <div>
+        <form onSubmit={handleSubmit}>
+          <h3 className="font-extrabold">User Log In</h3>
 
-        <label>Email:</label>
-        <input
-          type="email"
-          onChange={(e) => setEmail(e.target.value)}
-          value={email}
-        />
-        <label>Password:</label>
-        <input
-          type="password"
-          onChange={(e) => setPassword(e.target.value)}
-          value={password}
-        />
-        <button>Log In</button>
-      </form>
+          <label>Email:</label>
+          <input
+            type="email"
+            onChange={(e) => setEmail(e.target.value)}
+            value={email}
+            className="rounded-md border-2 mr-8"
+          />
+          <label>Password:</label>
+          <input
+            type="password"
+            onChange={(e) => setPassword(e.target.value)}
+            value={password}
+            className="rounded-md border-2 mr-8"
+          />
+          <button className="rounded-md border-2">Log In</button>
+        </form>
 
-      <button type="submit" value="Update" onClick={handleClick}>
-        Get All Users
-      </button>
-      {/* <h5>{users[0].email}</h5> */}
-    </div>
+        <button type="submit" value="Update" onClick={handleClick}>
+          For Testing User Log In: Get All Users
+        </button>
+        {/* <h5>{users[0].email}</h5> */}
+      </div>
+
+      <div className="mt-16 ">
+        <form onSubmit={handleSubmit}>
+          <h3 className="font-extrabold">Restaurant Admin Log In</h3>
+
+          <label>Email:</label>
+          <input
+            type="email"
+            onChange={(e) => setEmail(e.target.value)}
+            value={email}
+            className="rounded-md border-2 mr-8"
+          />
+          <label>Password:</label>
+          <input
+            type="password"
+            onChange={(e) => setPassword(e.target.value)}
+            value={password}
+            className="rounded-md border-2 mr-8"
+          />
+          <button className="rounded-md border-2">Log In</button>
+        </form>
+
+        {/* <button type="submit" value="Update" onClick={handleClick}>
+          For Testing User Log In: Get All Users
+        </button>
+        <h5>{users[0].email}</h5> */}
+      </div>
+    </>
   );
 }
 
