@@ -78,6 +78,28 @@ const spotifyToken = async (req, res) => {
   });
 };
 
+// Get songs on a playlist
+const getSongs = async (req, res) => {
+  let url = "https://api.spotify.com/v1/me";
+  const requestOptions = {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${access_token}`,
+    },
+  };
+  const userResult = await fetch(url, requestOptions);
+  const userResultJSON = await userResult.json();
+  const userID = userResultJSON.id;
+  url = `https://api.spotify.com/v1/users/${userID}/playlists`;
+  const userPlaylistsResult = await fetch(url, requestOptions);
+  const userPlaylistsResultJSON = await userPlaylistsResult.json();
+  const playlistId = userPlaylistsResultJSON.items[0].id;
+  url = `https://api.spotify.com/v1/playlists/${playlistId}/tracks`;
+  const userPlaylistSongs = await fetch(url, requestOptions);
+  userPlaylistSongsJSON = await userPlaylistSongs.json();
+};
+
 // Get current user profile, i.e. get user id
 const playSong = async (req, res) => {
   let url = "https://api.spotify.com/v1/me";

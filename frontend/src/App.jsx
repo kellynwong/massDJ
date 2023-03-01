@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import UserLogin from "./components/UserLogin";
 import AdminLogin from "./components/AdminLogin";
 import SpotifyLogin from "./components/SpotifyLogin";
-import Player from "./components/Player";
+import SpotifyPlayer from "./components/SpotifyPlayer";
 
 function App() {
   const [token, setToken] = useState("");
@@ -25,8 +25,10 @@ function App() {
       <div className="mt-16 p-2">
         <AdminLogin />
       </div>
-      <div className="font-extrabold mt-16 rounded-md border-2 w-44 bg-[#44c767] text-[#ffffff] p-2">
-        <div>{token === "" ? <SpotifyLogin /> : <Player token={token} />}</div>
+      <div className="font-extrabold mt-16 rounded-md border-2 w-40 bg-[#44c767] text-[#ffffff] p-2 ml-40">
+        <div>
+          {token === "" ? <SpotifyLogin /> : <SpotifyPlayer token={token} />}
+        </div>
       </div>
     </div>
   );

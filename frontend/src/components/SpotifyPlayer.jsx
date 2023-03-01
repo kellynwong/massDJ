@@ -8,7 +8,7 @@ const track = {
   artists: [{ name: "" }],
 };
 
-function Player(props) {
+function SpotifyPlayer(props) {
   const [is_paused, setPaused] = useState(false);
   const [is_active, setActive] = useState(false);
   const [player, setPlayer] = useState(undefined);
@@ -88,7 +88,7 @@ function Player(props) {
   } else {
     return (
       <>
-        <div className="container">
+        <div className="container ">
           <div className="main-wrapper">
             <img
               src={current_track.album.images[0].url}
@@ -136,4 +136,4 @@ function Player(props) {
   }
 }
 
-export default Player;
+export default SpotifyPlayer;
