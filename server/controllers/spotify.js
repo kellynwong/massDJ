@@ -1,4 +1,6 @@
 require("dotenv").config();
+const Playlist = require("../models/playlist");
+
 const request = require("request");
 
 let userPlaylistSongsJSON;
@@ -78,28 +80,6 @@ const spotifyToken = async (req, res) => {
   });
 };
 
-// Get songs on a playlist
-const getSongs = async (req, res) => {
-  let url = "https://api.spotify.com/v1/me";
-  const requestOptions = {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${access_token}`,
-    },
-  };
-  const userResult = await fetch(url, requestOptions);
-  const userResultJSON = await userResult.json();
-  const userID = userResultJSON.id;
-  url = `https://api.spotify.com/v1/users/${userID}/playlists`;
-  const userPlaylistsResult = await fetch(url, requestOptions);
-  const userPlaylistsResultJSON = await userPlaylistsResult.json();
-  const playlistId = userPlaylistsResultJSON.items[0].id;
-  url = `https://api.spotify.com/v1/playlists/${playlistId}/tracks`;
-  const userPlaylistSongs = await fetch(url, requestOptions);
-  userPlaylistSongsJSON = await userPlaylistSongs.json();
-};
-
 // Get current user profile, i.e. get user id
 const playSong = async (req, res) => {
   let url = "https://api.spotify.com/v1/me";
@@ -140,9 +120,7 @@ const playSong = async (req, res) => {
   */
   const userID = userResultJSON.id;
 
-  /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  ////// GET USER\'S PLAYLISTS --> i.e. USING USER ID /////////////////////////////////////////////////////////
-  /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  // GET USER\'S PLAYLISTS --> i.e. USING USER ID
   url = `https://api.spotify.com/v1/users/${userID}/playlists`;
   const userPlaylistsResult = await fetch(url, requestOptions);
   const userPlaylistsResultJSON = await userPlaylistsResult.json();
@@ -196,9 +174,7 @@ const playSong = async (req, res) => {
   */
   const playlistId = userPlaylistsResultJSON.items[0].id;
 
-  ////////////////////////////////////////////////////////////////////////////////////////////////////////
-  // GET PLAYLIST ITEMS --> i.e. USING PLAYLIST ID ///////////////////////////////////////////////////////
-  ////////////////////////////////////////////////////////////////////////////////////////////////////////
+  // GET PLAYLIST ITEMS --> i.e. USING PLAYLIST ID
   url = `https://api.spotify.com/v1/playlists/${playlistId}/tracks`;
   const userPlaylistSongs = await fetch(url, requestOptions);
   userPlaylistSongsJSON = await userPlaylistSongs.json();
@@ -307,14 +283,28 @@ const playSong = async (req, res) => {
   */
   // res.status(200).json(userPlaylistSongsJSON);
 
-  ////////////////////////////////////////////////////////////////////////////////////////////////////////
-  ///////////////////// START/RESUME PLAYBACK--> i.e. USING SPOTIFY ALBUM URI ////////////////////////////
-  ////////////////////////////////////////////////////////////////////////////////////////////////////////
-
+  // START/RESUME PLAYBACK--> i.e. USING SPOTIFY ALBUM URI
   let songURI = "";
-  const randomizedSongs = userPlaylistSongsJSON.items.sort(
+
+  let songs = userPlaylistSongsJSON.items;
+
+  let seedSongs = [];
+  for (const item of songs) {
+    const song = {
+      imgUrl: item.track.album.images[0].url,
+      title: item.track.name,
+      artist: item.track.artists[0].name,
+      trackUrl: item.track.uri,
+    };
+    seedSongs.push(song);
+  }
+  await Playlist.insertMany(seedSongs);
+  console.log("Seeded db with spotify playlist!");
+
+  let randomizedSongs = userPlaylistSongsJSON.items.sort(
     () => 0.5 - Math.random()
   );
+
   for (const item of randomizedSongs) {
     if (item.track) {
       if (item.track.available_markets.includes("SG")) {
@@ -323,7 +313,6 @@ const playSong = async (req, res) => {
       }
     }
   }
-
   url = "https://api.spotify.com/v1/me/player/play";
   playRequestOptions = {
     method: "PUT",
@@ -337,29 +326,12 @@ const playSong = async (req, res) => {
   };
   const song = await fetch(url, playRequestOptions);
   // const songJSON = await song.json();
-  res.status(200).json({ status: "ok" });
+  res.status(200).json({ userPlaylistSongsJSON });
 };
 
-// app.put("/player", async (req, res) => {
-//   let url = "https://api.spotify.com/v1/me/player/play";
-//   const requestOptions = {
-//     method: "PUT",
-//     headers: {
-//       "Content-Type": "application/json",
-//       Authorization: `Bearer ${access_token}`,
-//     },
-//     data: {
-//       context_uri: "spotify:album:5ht7ItJgpBH7W6vJ5BqpPr",
-//       offset: {
-//         position: 5,
-//       },
-//       position_ms: 0,
-//     },
-//   };
-//   const song = await fetch(url, requestOptions);
-//   console.log(song);
-//   // const songJSON = await song.json();
-//   res.status(200).json({ status: "ok" });
-// });
-
-module.exports = { spotifyLogin, spotifyCallback, spotifyToken, playSong };
+module.exports = {
+  spotifyLogin,
+  spotifyCallback,
+  spotifyToken,
+  playSong,
+};
