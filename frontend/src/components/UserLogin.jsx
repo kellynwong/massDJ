@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import Playlist from "./Playlist";
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -9,7 +10,6 @@ function Login() {
   const [loginError, setLoginError] = useState(false);
   const [signupSuccess, setSignupSuccess] = useState(false);
   const [signupError, setSignupError] = useState(false);
-  let emails;
 
   const handleSubmitSignup = async (e) => {
     setSignupSuccess(false);
@@ -154,6 +154,7 @@ function Login() {
           );
         })}
       </div>
+      <Playlist />
     </>
   );
 }
