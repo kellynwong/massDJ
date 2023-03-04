@@ -1,25 +1,27 @@
 require("dotenv").config();
 const Playlist = require("../models/playlist");
 
-// When user scans code
+// to load songs at homepage
 const getPlaylist = async (req, res) => {
-  const songs = await Playlist.find(); // to see what info to select to display
+  const songs = await Playlist.find();
   res.json(songs);
 };
 
-// When user clicks on upvote or downvote
+// When user clicks on vote
 const updatePlaylist = async (req, res) => {
-  // console.log(req.body);
   try {
     const response = await Playlist.updateOne(
       { _id: req.body.id },
       {
-        $set: {
-          counter: req.body.counter,
+        $inc: {
+          count: req.body.vote,
         },
-        $push: { votedBy: req.decoded.email },
+        $push: {
+          votedBy: req.userEmail,
+        },
       }
     );
+
     // console.log(response);
 
     res.json({ status: "ok", message: "updated" });

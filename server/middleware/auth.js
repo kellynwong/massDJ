@@ -9,6 +9,7 @@ const auth = (req, res, next) => {
   if (token) {
     try {
       const decoded = jwt.verify(token, process.env.ACCESS_SECRET);
+      req.userEmail = decoded.email;
       req.decoded = decoded;
       // console.log("decoded: " + decoded);
       next();

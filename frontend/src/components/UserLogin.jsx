@@ -1,7 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
+import DataContext from "../context/DataContext";
 import Playlist from "./Playlist";
 
 function Login() {
+  const dataContext = useContext(DataContext);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [data, setData] = useState("");
@@ -54,6 +56,9 @@ function Login() {
     const data = await res.json();
     setData(data);
     console.log(data);
+    console.log(data.access);
+
+    dataContext.setUserToken(data.access);
     if (data.message === "login failed" || data.message === "not authorised") {
       setLoginError(true);
     } else {

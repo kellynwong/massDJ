@@ -30,9 +30,11 @@ const {
   spotifyCallback,
   spotifyToken,
   playSong,
+  playSelectedSong,
 } = require("./controllers/spotify");
 
 const { getPlaylist, updatePlaylist } = require("./controllers/playlist");
+
 const { getAccountHistory } = require("./controllers/accountHistory");
 const auth = require("./middleware/auth");
 
@@ -76,6 +78,7 @@ router.get("/auth/login", spotifyLogin);
 router.get("/auth/callback", spotifyCallback);
 router.get("/auth/token", spotifyToken);
 router.get("/populate", playSong);
+router.put("/song", playSelectedSong); // play song upon clicking on song in homepage
 
 app.listen(port, () => {
   console.log(`Listening at http://localhost:${port}`);

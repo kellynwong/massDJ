@@ -329,9 +329,35 @@ const playSong = async (req, res) => {
   res.status(200).json({ userPlaylistSongsJSON });
 };
 
+// play song when user clicks on song at homepage
+const playSelectedSong = async (req, res) => {
+  console.log(req.body.id);
+  // prints 63ff9a581b6a4f463d8c5f82
+  const track = await Playlist.findOne(
+    { _id: req.body.id },
+    { trackUrl: 1, artist: 1, title: 1 }
+  );
+
+  url = "https://api.spotify.com/v1/me/player/play";
+  playRequestOptions = {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${access_token}`,
+    },
+    body: JSON.stringify({
+      uris: [track.trackUrl],
+    }),
+  };
+  const song = await fetch(url, playRequestOptions);
+  // const songJSON = await song.json();
+  res.status(200).json({ track });
+};
+
 module.exports = {
   spotifyLogin,
   spotifyCallback,
   spotifyToken,
   playSong,
+  playSelectedSong,
 };

@@ -5,8 +5,8 @@ const PlaylistSchema = new mongoose.Schema({
   title: { type: String },
   artist: { type: String },
   trackUrl: { type: String },
-  votedBy: [String],
-  counter: { type: Number },
+  votedBy: [{ type: String }],
+  count: { type: Number },
 });
 
 module.exports = mongoose.model("Playlist", PlaylistSchema);
