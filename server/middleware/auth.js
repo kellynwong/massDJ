@@ -27,4 +27,23 @@ const auth = (req, res, next) => {
   }
 };
 
-module.exports = auth;
+const authOptional = (req, res, next) => {
+  // put ? as guard, otherwise for users without authorization headers, will throw error: TypeError: Cannot read properties of undefined (reading 'replace')
+  const token = req.headers["authorization"]?.replace("Bearer ", "");
+
+  if (token) {
+    try {
+      const decoded = jwt.verify(token, process.env.ACCESS_SECRET);
+      req.userEmail = decoded.email;
+      req.decoded = decoded;
+      // console.log("decoded: " + decoded);
+      next();
+    } catch (error) {
+      next();
+    }
+  } else {
+    next();
+  }
+};
+
+module.exports = { auth, authOptional };

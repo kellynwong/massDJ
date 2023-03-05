@@ -4,10 +4,12 @@ import UserLogin from "./components/UserLogin";
 import AdminLogin from "./components/AdminLogin";
 import SpotifyLogin from "./components/SpotifyLogin";
 import SpotifyPlayer from "./components/SpotifyPlayer";
+import { v4 as uuidv4 } from "uuid";
 
 function App() {
   const [spotifyToken, setSpotifyToken] = useState("");
   const [userToken, setUserToken] = useState("");
+  // const [machineId, setMachineId] = useState("");
 
   useEffect(() => {
     async function getSpotifyToken() {
@@ -17,6 +19,47 @@ function App() {
     }
     getSpotifyToken();
   }, []);
+
+  // const getCookie = (keyName) => {
+  //   if (document.cookie.length != 0) {
+  //     let array = document.cookie.split(";");
+  //     for (x = 0; x < array.length; x++) {
+  //       let subArray = array[x].split("=");
+  //       let name = subArray[0];
+  //       let value = subArray[1];
+  //       if (name === keyName) {
+  //         return value;
+  //       }
+  //     }
+  //   }
+  // };
+
+  // const getColor = () => {
+  //   return getCookie("color");
+  // };
+
+  // const getMachineId = () => {
+  //   return getCookie("machineId");
+  // };
+
+  // const setCookie = () => {
+  //   let cookieName = "machineId";
+  //   let cookieValue = uuidv4();
+  //   let cookieExpiration = 365;
+  //   let color = "red";
+  //   let width = 50;
+  //   let height = 100;
+  //   document.cookie =
+  //     `machineId=${cookieValue}` +
+  //     ";" +
+  //     `expires=${cookieExpiration}` +
+  //     ";" +
+  //     `color=${color}` +
+  //     ";" +
+  //     `width=${width}` +
+  //     ";" +
+  //     `height=${height}`;
+  // };
 
   return (
     <DataContext.Provider

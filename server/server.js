@@ -1,5 +1,6 @@
 require("dotenv").config();
 const express = require("express");
+const cookieParser = require("cookie-parser");
 const cors = require("cors");
 const connectDB = require("./db/db");
 const router = express.Router();
@@ -36,12 +37,13 @@ const {
 const { getPlaylist, updatePlaylist } = require("./controllers/playlist");
 
 const { getAccountHistory } = require("./controllers/accountHistory");
-const auth = require("./middleware/auth");
+const { auth, authOptional } = require("./middleware/auth");
 
 const app = express();
 
 app.use(cors());
 app.use(express.json());
+app.use(cookieParser());
 app.use(express.urlencoded({ extended: false }));
 
 connectDB();
@@ -58,9 +60,8 @@ router.delete("/users", auth, deleteUser);
 
 // playlist
 //router.post("/playlist", createPlaylistFromSpotify); // for "seeding" songs from restaurant's playlist
-router.get("/playlist", getPlaylist); // for gettings songs for customers
-router.put("/playlist", updatePlaylist); // for voting now, but will remove if i add model for votes
-// router.post("/playlist/vote", addVote);
+router.get("/playlist", authOptional, getPlaylist); // for gettings songs for customers
+router.put("/playlist", authOptional, updatePlaylist); // for voting
 
 // accounthistory
 router.get("/accounthistory", auth, getAccountHistory);

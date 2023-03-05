@@ -1,14 +1,56 @@
 require("dotenv").config();
 const Playlist = require("../models/playlist");
+const uuid = require("uuid");
 
-// to load songs at homepage
+// to load songs at homepage, and when loads, assign a cookie if cookie does not exist
 const getPlaylist = async (req, res) => {
-  const songs = await Playlist.find();
+  // lean will give me back the entire JSON, will then allow me to change it like an object, i.e. add new property
+  const songs = await Playlist.find().lean();
+
+  if (!req.cookies.machineId) {
+    let cookieName = "machineId";
+    let cookieValue = uuid.v4();
+    res.cookie(cookieName, cookieValue, { maxAge: 60 * 1000 * 60 * 24 });
+
+    console.log(req.cookies.machineId);
+  }
+
+  let identifier;
+  if (req.userEmail) {
+    identifier = req.userEmail;
+  } else {
+    identifier = req.cookies.machineId;
+  }
+
+  for (let x = 0; x < songs.length; x++) {
+    if (songs[x].votedBy.find((y) => y === identifier)) {
+      console.log("here");
+      songs[x].votedBefore = "Yes";
+    }
+  }
+
   res.json(songs);
 };
 
 // When user clicks on vote
 const updatePlaylist = async (req, res) => {
+  let identifier;
+  if (req.userEmail) {
+    identifier = req.userEmail;
+  } else {
+    identifier = req.cookies.machineId;
+  }
+
+  const voteBefore = await Playlist.findOne({
+    _id: req.body.id,
+    votedBy: identifier,
+  });
+
+  if (voteBefore) {
+    res.status(400).json({ status: "error", message: "voted before" });
+    return;
+  }
+
   try {
     const response = await Playlist.updateOne(
       { _id: req.body.id },
@@ -17,12 +59,10 @@ const updatePlaylist = async (req, res) => {
           count: req.body.vote,
         },
         $push: {
-          votedBy: req.userEmail,
+          votedBy: identifier,
         },
       }
     );
-
-    // console.log(response);
 
     res.json({ status: "ok", message: "updated" });
   } catch (error) {

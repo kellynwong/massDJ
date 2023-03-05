@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import DataContext from "../context/DataContext";
+
 function Playlist() {
   const [playlist, setPlaylist] = useState([]);
   const dataContext = useContext(DataContext);
@@ -13,7 +14,7 @@ function Playlist() {
           // Authorization: `Bearer ${token}`,
         },
       };
-      const url = "http://127.0.0.1:4000/playlist";
+      const url = "http://localhost:3000/playlist";
       const res = await fetch(url, requestOptions);
       const playlist = await res.json();
       setPlaylist(playlist);
@@ -25,6 +26,7 @@ function Playlist() {
     let songId = e.target.value;
     console.log(songId);
     // prints 63ff9a581b6a4f463d8c5f82
+
     const requestOptions = {
       method: "PUT",
       headers: {
@@ -36,7 +38,7 @@ function Playlist() {
       }),
     };
 
-    const url = "http://127.0.0.1:4000/song";
+    const url = "http://localhost:3000/song";
     const res = await fetch(url, requestOptions);
     const song = await res.json();
   };
@@ -53,7 +55,7 @@ function Playlist() {
         vote: voting,
       }),
     };
-    const url = "http://127.0.0.1:4000/playlist";
+    const url = "http://localhost:3000/playlist";
     const res = await fetch(url, requestOptions);
     const vote = await res.json();
   };
@@ -78,11 +80,19 @@ function Playlist() {
 
                 <td className="w-1/5 h-1/5">{song.count || 0} votes</td>
 
-                <td className="w-1/5 h-1/5">
-                  <button onClick={() => handleChange(song._id, 1)}>+</button>
-                  Vote
-                  <button onClick={() => handleChange(song._id, -1)}>-</button>
-                </td>
+                {song.votedBefore ? (
+                  <h4>NA</h4>
+                ) : (
+                  <td className="w-1/5 h-1/5">
+                    <button onClick={() => handleChange(song._id, 1)}>+</button>
+                    Vote
+                    <button onClick={() => handleChange(song._id, -1)}>
+                      -
+                    </button>
+                  </td>
+                )}
+
+                {/* <td className="w-1/5 h-1/5">{song.votedBefore}</td> */}
               </tr>
             </tbody>
           </table>
