@@ -32,6 +32,7 @@ const {
   spotifyToken,
   playSong,
   playSelectedSong,
+  spotifyQueue,
 } = require("./controllers/spotify");
 
 const { getPlaylist, updatePlaylist } = require("./controllers/playlist");
@@ -59,7 +60,6 @@ router.get("/users/profile", auth, getUser);
 router.delete("/users", auth, deleteUser);
 
 // playlist
-//router.post("/playlist", createPlaylistFromSpotify); // for "seeding" songs from restaurant's playlist
 router.get("/playlist", authOptional, getPlaylist); // for gettings songs for customers
 router.put("/playlist", authOptional, updatePlaylist); // for voting
 
@@ -78,8 +78,9 @@ router.delete("/admin", auth, deleteAdmin);
 router.get("/auth/login", spotifyLogin);
 router.get("/auth/callback", spotifyCallback);
 router.get("/auth/token", spotifyToken);
-router.get("/populate", playSong);
+router.get("/populate", playSong); // seed songs to db and also play random song
 router.put("/song", playSelectedSong); // play song upon clicking on song in homepage
+router.post("/queue", spotifyQueue);
 
 app.listen(port, () => {
   console.log(`Listening at http://localhost:${port}`);

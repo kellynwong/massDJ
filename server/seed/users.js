@@ -8,7 +8,7 @@ connectDB();
 const main = async () => {
   const seedUsers = [
     {
-      email: "merlin@gmail.com", userPlaylistSongsJSON.
+      email: "merlin@gmail.com",
       password: "countryroads",
     },
     { email: "lancelot@gmail.com", password: "roxy" },
