@@ -18,7 +18,7 @@ export default defineConfig({
         changeOrigin: true,
         secure: false,
       },
-      "/songs": {
+      "/song": {
         target: "http://localhost:4000",
         changeOrigin: true,
         secure: false,

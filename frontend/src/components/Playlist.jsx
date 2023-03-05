@@ -6,21 +6,29 @@ function Playlist() {
   const dataContext = useContext(DataContext);
 
   useEffect(() => {
-    const displaySongs = async () => {
-      const requestOptions = {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          // Authorization: `Bearer ${token}`,
-        },
+    const interval = setInterval(() => {
+      console.log("This will run every second!");
+      const displaySongs = async () => {
+        console.log("Making request with userToken: " + dataContext.userToken);
+        const requestOptions = {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${dataContext.userToken}`,
+          },
+        };
+        const url = "http://localhost:3000/playlist";
+        const res = await fetch(url, requestOptions);
+        const playlist = await res.json();
+        setPlaylist(playlist);
       };
-      const url = "http://localhost:3000/playlist";
-      const res = await fetch(url, requestOptions);
-      const playlist = await res.json();
-      setPlaylist(playlist);
+      displaySongs();
+    }, 1000);
+
+    return () => {
+      clearInterval(interval);
     };
-    displaySongs();
-  }, []);
+  }, [dataContext.userToken]);
 
   const handleClick = async (e) => {
     let songId = e.target.value;
@@ -81,7 +89,7 @@ function Playlist() {
                 <td className="w-1/5 h-1/5">{song.count || 0} votes</td>
 
                 {song.votedBefore ? (
-                  <h4>NA</h4>
+                  <h4>You Have Voted Before</h4>
                 ) : (
                   <td className="w-1/5 h-1/5">
                     <button onClick={() => handleChange(song._id, 1)}>+</button>

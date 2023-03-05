@@ -6,12 +6,10 @@ const uuid = require("uuid");
 const getPlaylist = async (req, res) => {
   // lean will give me back the entire JSON, will then allow me to change it like an object, i.e. add new property
   const songs = await Playlist.find().lean();
-
   if (!req.cookies.machineId) {
     let cookieName = "machineId";
     let cookieValue = uuid.v4();
     res.cookie(cookieName, cookieValue, { maxAge: 60 * 1000 * 60 * 24 });
-
     console.log(req.cookies.machineId);
   }
 
@@ -21,14 +19,13 @@ const getPlaylist = async (req, res) => {
   } else {
     identifier = req.cookies.machineId;
   }
+  console.log("Getting playlist for: " + identifier);
 
   for (let x = 0; x < songs.length; x++) {
     if (songs[x].votedBy.find((y) => y === identifier)) {
-      console.log("here");
       songs[x].votedBefore = "Yes";
     }
   }
-
   res.json(songs);
 };
 

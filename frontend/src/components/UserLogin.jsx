@@ -30,6 +30,8 @@ function Login() {
     const data = await res.json();
     setData(data);
     console.log(data);
+    dataContext.setUserToken(data.access);
+
     if (
       data.message === "duplicate username" ||
       data.message === "an error has occurred"
@@ -55,10 +57,8 @@ function Login() {
     const res = await fetch(url, requestOptions);
     const data = await res.json();
     setData(data);
-    console.log(data);
-    console.log(data.access);
-
     dataContext.setUserToken(data.access);
+    console.log("Logged in as " + data.access);
     if (data.message === "login failed" || data.message === "not authorised") {
       setLoginError(true);
     } else {

@@ -20,7 +20,8 @@ const createUser = async (req, res) => {
       hash,
     });
     // console.log("created user is: ", createdUser);
-    res.json({ status: "okay", message: "user created" });
+    await login(req, res);
+    // res.json({ status: "okay", message: "user created" });
   } catch (error) {
     // console.log("PUT /users/create", error);
     res.status(400).json({ status: "error", message: "an error has occurred" });
