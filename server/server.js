@@ -32,6 +32,7 @@ const {
   spotifyToken,
   playSong,
   playSelectedSong,
+  currentlyPlaying,
   spotifyQueue,
 } = require("./controllers/spotify");
 
@@ -78,8 +79,9 @@ router.delete("/admin", auth, deleteAdmin);
 router.get("/auth/login", spotifyLogin);
 router.get("/auth/callback", spotifyCallback);
 router.get("/auth/token", spotifyToken);
-router.get("/populate", playSong); // seed songs to db and also play random song
-router.put("/song", playSelectedSong); // play song upon clicking on song in homepage
+router.get("/populate", playSong);
+router.put("/song", playSelectedSong);
+router.get("/current", currentlyPlaying);
 router.post("/queue", spotifyQueue);
 
 app.listen(port, () => {

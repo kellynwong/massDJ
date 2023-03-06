@@ -99,8 +99,6 @@ function Playlist() {
                     </button>
                   </td>
                 )}
-
-                {/* <td className="w-1/5 h-1/5">{song.votedBefore}</td> */}
               </tr>
             </tbody>
           </table>

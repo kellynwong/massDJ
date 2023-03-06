@@ -60,21 +60,21 @@ function AdminLogin() {
     }
   };
 
-  const handleClick = async () => {
-    const token = data.access;
-    const requestOptions = {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-    };
-    const url = "http://127.0.0.1:4000/admin";
-    const res = await fetch(url, requestOptions);
-    const admin = await res.json();
-    setAdmin(admin);
-    console.log(admin);
-  };
+  // const handleClick = async () => {
+  //   const token = data.access;
+  //   const requestOptions = {
+  //     method: "GET",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //       Authorization: `Bearer ${token}`,
+  //     },
+  //   };
+  //   const url = "http://127.0.0.1:4000/admin";
+  //   const res = await fetch(url, requestOptions);
+  //   const admin = await res.json();
+  //   setAdmin(admin);
+  //   console.log(admin);
+  // };
 
   return (
     <>
@@ -135,7 +135,7 @@ function AdminLogin() {
             {signupError && "Signup Failed, Please Try Again!"}
           </span>
         </div>
-        <button
+        {/* <button
           className="rounded-md border-2 mt-4 w-80"
           type="submit"
           value="Update"
@@ -153,7 +153,7 @@ function AdminLogin() {
               </tbody>
             </table>
           );
-        })}
+        })} */}
       </div>
     </>
   );

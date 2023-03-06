@@ -35,7 +35,6 @@ function SpotifyPlayer(props) {
       player.addListener("ready", async ({ device_id }) => {
         console.log("Ready with Device ID", device_id);
 
-        // Always set this device as the active device, so annoying
         let url = "https://api.spotify.com/v1/me/player";
         let requestOptions = {
           method: "PUT",

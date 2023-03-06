@@ -4,7 +4,7 @@ import UserLogin from "./components/UserLogin";
 import AdminLogin from "./components/AdminLogin";
 import SpotifyLogin from "./components/SpotifyLogin";
 import SpotifyPlayer from "./components/SpotifyPlayer";
-import { v4 as uuidv4 } from "uuid";
+import Current from "./components/Current";
 
 function App() {
   const [spotifyToken, setSpotifyToken] = useState("");
@@ -30,6 +30,7 @@ function App() {
       }}
     >
       <div>
+        <Current />
         <div className="font-extrabold mt-16 rounded-md border-2 w-40 bg-[#44c767] text-[#ffffff] p-2 ml-40">
           <div>
             {spotifyToken === "" ? (

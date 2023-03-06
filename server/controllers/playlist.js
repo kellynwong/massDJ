@@ -19,7 +19,7 @@ const getPlaylist = async (req, res) => {
   } else {
     identifier = req.cookies.machineId;
   }
-  console.log("Getting playlist for: " + identifier);
+  // console.log("Getting playlist for: " + identifier);
 
   for (let x = 0; x < songs.length; x++) {
     if (songs[x].votedBy.find((y) => y === identifier)) {

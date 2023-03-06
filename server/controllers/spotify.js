@@ -21,7 +21,8 @@ let generateRandomString = function (length) {
 // Login
 const spotifyLogin = async (req, res) => {
   // allowable features from the requested token - what this access token can do
-  var scope = "streaming user-read-email user-read-private";
+  var scope =
+    "streaming user-read-email user-read-private app-remote-control user-read-playback-state user-modify-playback-state user-read-currently-playing";
 
   var state = generateRandomString(16);
 
@@ -149,10 +150,9 @@ const playSong = async (req, res) => {
   res.status(200).json({ userPlaylistSongsJSON });
 };
 
-// play song when user clicks on song at homepage
+// Plays a song selected by user
 const playSelectedSong = async (req, res) => {
-  console.log(req.body.id);
-  // prints 63ff9a581b6a4f463d8c5f82
+  // console.log(req.body.id); // prints 63ff9a581b6a4f463d8c5f82
   const track = await Playlist.findOne(
     { _id: req.body.id },
     { trackUrl: 1, artist: 1, title: 1 }
@@ -169,10 +169,46 @@ const playSelectedSong = async (req, res) => {
     }),
   };
   const song = await fetch(url, playRequestOptions);
-  // const songJSON = await song.json();
   res.status(200).json({ track });
 };
 
+// Get currently playing track
+const currentlyPlaying = async (req, res) => {
+  url = "https://api.spotify.com/v1/me/player/currently-playing";
+  console.log(access_token);
+  playRequestOptions = {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${access_token}`,
+    },
+  };
+  const currentlyPlayingResponse = await fetch(url, playRequestOptions);
+
+  if (currentlyPlayingResponse.status != 200) {
+    res
+      .status(400)
+      .json({ status: "notok", message: currentlyPlayingResponse.statusText });
+    return;
+  }
+  console.log(currentlyPlayingResponse);
+  const currentlyPlayingJSON = await currentlyPlayingResponse.json();
+
+  console.log(currentlyPlayingJSON);
+
+  const progress_ms = currentlyPlayingJSON.progress_ms;
+  console.log("progress_ms: " + progress_ms);
+
+  const duration_ms = currentlyPlayingJSON.item?.duration_ms;
+  console.log("duration_ms: " + duration_ms);
+
+  const name = currentlyPlayingJSON.item?.name;
+  console.log("name: " + name);
+
+  res.status(200).json({ progress_ms, duration_ms, name });
+};
+
+// Add item to playback queue
 const spotifyQueue = async (req, res) => {
   url = "https://api.spotify.com/v1/me/player/queue";
   playRequestOptions = {
@@ -186,7 +222,6 @@ const spotifyQueue = async (req, res) => {
     }),
   };
   const queue = await fetch(url, playRequestOptions);
-  // const songJSON = await song.json();
   res.status(200).json({ queue });
 };
 
@@ -196,5 +231,6 @@ module.exports = {
   spotifyToken,
   playSong,
   playSelectedSong,
+  currentlyPlaying,
   spotifyQueue,
 };

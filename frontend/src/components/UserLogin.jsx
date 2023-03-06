@@ -66,21 +66,21 @@ function Login() {
     }
   };
 
-  const handleClick = async () => {
-    const token = data.access;
-    const requestOptions = {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-    };
-    const url = "http://127.0.0.1:4000/users";
-    const res = await fetch(url, requestOptions);
-    const users = await res.json();
-    setUsers(users);
-    console.log(users);
-  };
+  // const handleClick = async () => {
+  //   const token = data.access;
+  //   const requestOptions = {
+  //     method: "GET",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //       Authorization: `Bearer ${token}`,
+  //     },
+  //   };
+  //   const url = "http://127.0.0.1:4000/users";
+  //   const res = await fetch(url, requestOptions);
+  //   const users = await res.json();
+  //   setUsers(users);
+  //   console.log(users);
+  // };
 
   return (
     <>
@@ -139,7 +139,7 @@ function Login() {
             {signupError && "Signup Failed, Please Try Again!"}
           </span>
         </div>
-        <button
+        {/* <button
           className="rounded-md border-2 mt-4 w-80"
           type="submit"
           value="Update"
@@ -157,7 +157,7 @@ function Login() {
               </tbody>
             </table>
           );
-        })}
+        })} */}
       </div>
       <Playlist />
     </>
