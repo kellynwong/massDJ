@@ -7,6 +7,7 @@ const PlaylistSchema = new mongoose.Schema({
   trackUrl: { type: String },
   votedBy: [{ type: String }],
   count: { type: Number },
+  // lastPlayed: { type: },
 });
 
 module.exports = mongoose.model("Playlist", PlaylistSchema);

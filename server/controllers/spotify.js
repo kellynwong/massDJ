@@ -172,10 +172,10 @@ const playSelectedSong = async (req, res) => {
   res.status(200).json({ track });
 };
 
-// Get currently playing track
-const currentlyPlaying = async (req, res) => {
+let currentlyPlayingJSON;
+// Evaluate when current song is ending
+const playNextSongAtEndOfCurrentSong = async (req, res) => {
   url = "https://api.spotify.com/v1/me/player/currently-playing";
-  console.log(access_token);
   playRequestOptions = {
     method: "GET",
     headers: {
@@ -191,10 +191,8 @@ const currentlyPlaying = async (req, res) => {
       .json({ status: "notok", message: currentlyPlayingResponse.statusText });
     return;
   }
-  console.log(currentlyPlayingResponse);
-  const currentlyPlayingJSON = await currentlyPlayingResponse.json();
 
-  console.log(currentlyPlayingJSON);
+  currentlyPlayingJSON = await currentlyPlayingResponse.json();
 
   const progress_ms = currentlyPlayingJSON.progress_ms;
   console.log("progress_ms: " + progress_ms);
@@ -202,27 +200,59 @@ const currentlyPlaying = async (req, res) => {
   const duration_ms = currentlyPlayingJSON.item?.duration_ms;
   console.log("duration_ms: " + duration_ms);
 
+  const is_playing = currentlyPlayingJSON.is_playing;
+  console.log("is_playing: " + is_playing);
+
   const name = currentlyPlayingJSON.item?.name;
   console.log("name: " + name);
 
-  res.status(200).json({ progress_ms, duration_ms, name });
+  if (duration_ms - progress_ms < 1000 || is_playing === false) {
+    await findNextVotedSong();
+    res.status(200).json({ status: "ok", message: "played successfully" });
+    return;
+  }
+
+  res.status(200).json({ progress_ms, duration_ms, is_playing, name });
 };
 
-// Add item to playback queue
-const spotifyQueue = async (req, res) => {
-  url = "https://api.spotify.com/v1/me/player/queue";
+// Find next voted song
+const findNextVotedSong = async () => {
+  const songs = await Playlist.find();
+  let mostVotes = 0;
+  let mostVotedSongTrackUrl;
+  for (let x = 0; x < songs.length; x++) {
+    if (songs[x]?.count > mostVotes) {
+      mostVotes = songs[x].count;
+      mostVotedSongTrackUrl = songs[x].trackUrl;
+    }
+  }
+  await playNextMostVotedSong(mostVotedSongTrackUrl);
+  await Playlist.updateOne(
+    { trackUrl: mostVotedSongTrackUrl },
+    {
+      $set: {
+        lastPlayed: new Date(),
+        count: 0,
+        votedBy: [],
+      },
+    }
+  );
+};
+
+// Play next voted song
+const playNextMostVotedSong = async (trackUrl) => {
+  url = "https://api.spotify.com/v1/me/player/play";
   playRequestOptions = {
-    method: "POST",
+    method: "PUT",
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${access_token}`,
     },
     body: JSON.stringify({
-      uris: [songURI],
+      uris: [trackUrl],
     }),
   };
-  const queue = await fetch(url, playRequestOptions);
-  res.status(200).json({ queue });
+  await fetch(url, playRequestOptions);
 };
 
 module.exports = {
@@ -231,6 +261,5 @@ module.exports = {
   spotifyToken,
   playSong,
   playSelectedSong,
-  currentlyPlaying,
-  spotifyQueue,
+  playNextSongAtEndOfCurrentSong,
 };

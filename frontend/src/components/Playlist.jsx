@@ -3,8 +3,10 @@ import DataContext from "../context/DataContext";
 
 function Playlist() {
   const [playlist, setPlaylist] = useState([]);
+  const [currentSong, setCurrentSong] = useState("");
   const dataContext = useContext(DataContext);
 
+  // Refresh page to update vote count and disable voting for songs user has voted for
   useEffect(() => {
     const interval = setInterval(() => {
       console.log("This will run every second!");
@@ -29,6 +31,33 @@ function Playlist() {
       clearInterval(interval);
     };
   }, [dataContext.userToken]);
+
+  // Sends request periodically to evaluate progress of song currently playing
+  useEffect(() => {
+    const interval = setInterval(() => {
+      console.log("This too shall run?");
+      const currentlyPlaying = async () => {
+        const requestOptions = {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${dataContext.userToken}`,
+          },
+        };
+        const url = "http://localhost:4000/pollqueue";
+        const res = await fetch(url, requestOptions);
+        console.log(res);
+        const currentSong = await res.json();
+        if (currentSong.duration_ms) {
+          setCurrentSong(currentSong);
+        }
+      };
+      currentlyPlaying();
+    }, 1000);
+    return () => {
+      clearInterval(interval);
+    };
+  }, []);
 
   const handleClick = async (e) => {
     let songId = e.target.value;

@@ -32,8 +32,7 @@ const {
   spotifyToken,
   playSong,
   playSelectedSong,
-  currentlyPlaying,
-  spotifyQueue,
+  playNextSongAtEndOfCurrentSong,
 } = require("./controllers/spotify");
 
 const { getPlaylist, updatePlaylist } = require("./controllers/playlist");
@@ -81,8 +80,7 @@ router.get("/auth/callback", spotifyCallback);
 router.get("/auth/token", spotifyToken);
 router.get("/populate", playSong);
 router.put("/song", playSelectedSong);
-router.get("/current", currentlyPlaying);
-router.post("/queue", spotifyQueue);
+router.get("/pollqueue", playNextSongAtEndOfCurrentSong);
 
 app.listen(port, () => {
   console.log(`Listening at http://localhost:${port}`);
