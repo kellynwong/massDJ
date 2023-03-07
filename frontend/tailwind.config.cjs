@@ -11,11 +11,7 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        myNerve: ['"Mynerve"'],
-        notoSansSc: ['"NotoSansSC"'],
-        dosis: ['"Dosis"'],
         barlow: ['"Barlow"'],
-        hind: ['"Hind"'],
         poppins: ['"Poppins"'],
       },
       animation: {

@@ -8,10 +8,9 @@ import Headers from "./components/Headers";
 function App() {
   const [spotifyToken, setSpotifyToken] = useState("");
   const [userToken, setUserToken] = useState("");
-  const [userIsLoggedIn, setUserIsLoggedIn] = useState(false);
-  const [adminIsLoggedIn, setAdminIsLoggedIn] = useState(false);
-  const [adminFormIsOpen, setAdminFormIsOpen] = useState(false);
-  const [userFormIsOpen, setUserFormIsOpen] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [formIsOpen, setFormIsOpen] = useState(false);
+  const [user, setUser] = useState("");
 
   // Get spotiify token
   useEffect(() => {
@@ -23,37 +22,38 @@ function App() {
     getSpotifyToken();
   }, []);
 
+  console.log(user);
   return (
     <DataContext.Provider
       value={{
+        setSpotifyToken,
         userToken,
         setUserToken,
-        userIsLoggedIn,
-        setUserIsLoggedIn,
-        adminIsLoggedIn,
-        setAdminIsLoggedIn,
-        adminFormIsOpen,
-        setAdminFormIsOpen,
-        userFormIsOpen,
-        setUserFormIsOpen,
+        isLoggedIn,
+        setIsLoggedIn,
+        formIsOpen,
+        setFormIsOpen,
+        user,
+        setUser,
       }}
     >
       <div className="bg-[#181818] rounded-3xl border-transparent border-4 relative">
         <span className="absolute ml-[168px] border border-[#8B8B8B] bg-[#8B8B8B] w-16 h-2 mt-2 rounded-full"></span>
         <Headers />
         <div className="text-white font-bold mt-[-10px] text-lg text-left border-[13px] border-transparent">
-          Good morning
+          Currently Playing:
+        </div>
+        <div>
+          {user.isAdmin &&
+            (spotifyToken === "" ? (
+              <SpotifyLogin />
+            ) : (
+              <SpotifyPlayer token={spotifyToken} />
+            ))}
         </div>
         <div>
           <div>
             <Playlist />
-          </div>
-          <div>
-            {spotifyToken === "" ? (
-              <SpotifyLogin />
-            ) : (
-              <SpotifyPlayer token={spotifyToken} />
-            )}
           </div>
         </div>
       </div>

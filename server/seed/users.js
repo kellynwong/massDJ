@@ -8,18 +8,18 @@ connectDB();
 const main = async () => {
   const seedUsers = [
     {
-      email: "shilefang@hotmail.com",
+      email: "shilifang@hotmail.com",
       password: "hotpotgood",
-      isAdmin: true
-    }
+      isAdmin: true,
+    },
     {
       email: "merlin@gmail.com",
       password: "countryroads",
     },
-    { email: "lancelot@gmail.com", password: "roxy" },
+    { email: "lancelot@gmail.com", password: "roxyroxy" },
     {
       email: "eggsy@gmail.com",
-      password: "galahadjr",
+      password: "funtimes",
     },
     {
       email: "kellyn@gmail.com",

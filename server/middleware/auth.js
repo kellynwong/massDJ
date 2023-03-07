@@ -28,7 +28,7 @@ const auth = (req, res, next) => {
 };
 
 const authAdmin = (req, res, next) => {
-  const token = req.headers["authorization"].replace("Bearer ", "");
+  const token = req.headers["authorization"]?.replace("Bearer ", "");
   // console.log("token replacing bearer: " + token);
 
   if (token) {

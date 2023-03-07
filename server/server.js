@@ -45,30 +45,29 @@ app.use("/", router);
 
 // users
 router.post("/users", createUser);
-router.post("/users/login", login);
+router.post("/users/login", login); // for admin to log in now (combined database now with a flag showing whether isAdmin (boolean))
 router.post("/users/refresh", refresh);
 router.get("/users/profile", auth, getUser);
 router.delete("/users", auth, deleteUser);
 
+// admin
+router.get("/admin/users", authAdmin, getUsersAdmin);
+router.put("/admin/users", authAdmin, updateUserAdmin);
+router.delete("/admin/users", authAdmin, deleteUser);
+router.get("/auth/login", spotifyLogin); // need to add in authAdmin here later (Wednesday)
+router.get("/auth/token", spotifyToken);
+router.get("/auth/callback", spotifyCallback);
+// spotify
+router.get("/populate", authAdmin, playSong);
+router.put("/song", authAdmin, playSelectedSong);
+router.get("/pollqueue", playNextSongAtEndOfCurrentSong);
+
 // playlist
-router.get("/playlist", authOptional, getPlaylist); // for gettings songs for customers
+router.get("/playlist", authOptional, getPlaylist); // get songs
 router.put("/playlist", authOptional, updatePlaylist); // for voting
 
 // accounthistory
 router.get("/accounthistory", auth, getAccountHistory);
-
-// restaurant admin
-router.get("/admin/users", authAdmin, getUsersAdmin);
-router.put("/admin/users", authAdmin, updateUserAdmin);
-router.delete("/admin/users", authAdmin, deleteUser);
-router.get("/auth/login", spotifyLogin);
-router.get("/auth/token", spotifyToken);
-router.get("/auth/callback", spotifyCallback);
-
-// spotifyplayer
-router.get("/populate", playSong);
-router.put("/song", playSelectedSong);
-router.get("/pollqueue", playNextSongAtEndOfCurrentSong);
 
 app.listen(port, () => {
   console.log(`Listening at http://localhost:${port}`);

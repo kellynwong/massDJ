@@ -9,9 +9,9 @@ function Playlist() {
   // Refresh page to update vote count and disable voting for songs user has voted for
   useEffect(() => {
     const interval = setInterval(() => {
-      console.log("This will run every second!");
+      // console.log("This will run every second!");
       const displaySongs = async () => {
-        console.log("Making request with userToken: " + dataContext.userToken);
+        // console.log("Making request with userToken: " + dataContext.userToken);
         const requestOptions = {
           method: "GET",
           headers: {
@@ -40,7 +40,7 @@ function Playlist() {
   // Sends request periodically to evaluate progress of song currently playing
   useEffect(() => {
     const interval = setInterval(() => {
-      console.log("This too shall run?");
+      // console.log("This too shall run?");
       const currentlyPlaying = async () => {
         const requestOptions = {
           method: "GET",
@@ -51,7 +51,6 @@ function Playlist() {
         };
         const url = "http://localhost:4000/pollqueue";
         const res = await fetch(url, requestOptions);
-        console.log(res);
         const currentSong = await res.json();
         if (currentSong.duration_ms) {
           setCurrentSong(currentSong);

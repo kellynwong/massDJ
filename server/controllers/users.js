@@ -88,7 +88,7 @@ const refresh = (req, res) => {
   }
 };
 
-// Get profile of a user (auth)
+// Get profile of a ownself (auth)
 const getUser = async (req, res) => {
   try {
     const user = await Users.findOne({ email: req.decoded.email });
@@ -105,7 +105,7 @@ const getUser = async (req, res) => {
   }
 };
 
-// Delete a user (auth)
+// Delete ownself (auth/authAdmin)
 const deleteUser = async (req, res) => {
   if (req.decoded.email === req.body.email || req.decoded.isAdmin) {
     try {

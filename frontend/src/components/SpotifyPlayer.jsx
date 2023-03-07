@@ -1,4 +1,8 @@
 import React, { useState, useEffect } from "react";
+import { RiSkipForwardLine } from "react-icons/ri";
+import { RiSkipBackLine } from "react-icons/ri";
+import { RiPlayCircleLine } from "react-icons/ri";
+import { RiPauseCircleLine } from "react-icons/ri";
 
 const track = {
   name: "",
@@ -87,16 +91,18 @@ function SpotifyPlayer(props) {
   } else {
     return (
       <>
-        <div className="container ">
-          <div className="main-wrapper">
+        <div className="container border-[13px] border-transparent font-barlow text-[15px] text-[#8B8B8B] ">
+          <div className="main-wrapper ml-7">
             <img
               src={current_track.album.images[0].url}
               className="now-playing__cover"
               alt=""
             />
 
-            <div className="now-playing__side">
-              <div className="now-playing__name">{current_track.name}</div>
+            <div className="now-playing__side mt-4 text-center">
+              <div className="now-playing__name font-bold">
+                {current_track.name}
+              </div>
               <div className="now-playing__artist">
                 {current_track.artists[0].name}
               </div>
@@ -107,7 +113,7 @@ function SpotifyPlayer(props) {
                   player.previousTrack();
                 }}
               >
-                &lt;&lt;
+                <RiSkipBackLine />
               </button>
 
               <button
@@ -116,7 +122,7 @@ function SpotifyPlayer(props) {
                   player.togglePlay();
                 }}
               >
-                {is_paused ? "PLAY" : "PAUSE"}
+                {is_paused ? <RiPlayCircleLine /> : <RiPauseCircleLine />}
               </button>
 
               <button
@@ -125,7 +131,7 @@ function SpotifyPlayer(props) {
                   player.nextTrack();
                 }}
               >
-                &gt;&gt;
+                <RiSkipForwardLine />
               </button>
             </div>
           </div>

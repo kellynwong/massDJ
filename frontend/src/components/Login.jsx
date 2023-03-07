@@ -1,23 +1,23 @@
 import React, { useState, useContext } from "react";
 import DataContext from "../context/DataContext";
+import SpotifyLogin from "../components/SpotifyLogin";
 
 function Login() {
   const dataContext = useContext(DataContext);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [data, setData] = useState("");
   const [loginSuccess, setLoginSuccess] = useState(false);
   const [loginError, setLoginError] = useState(false);
   const [signupSuccess, setSignupSuccess] = useState(false);
   const [signupError, setSignupError] = useState(false);
 
+  // When user clicks on "Signup" button
   const handleSubmitSignup = async (e) => {
     setSignupSuccess(false);
     setSignupError(false);
     setLoginSuccess(false);
     setLoginError(false);
     console.log(JSON.stringify({ email, password }));
-
     const requestOptions = {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -26,13 +26,10 @@ function Login() {
     const url = "http://127.0.0.1:4000/users";
     const res = await fetch(url, requestOptions);
     const data = await res.json();
-    setData(data);
-    dataContext.setUserToken(data.access);
-    dataContext.setUserIsLoggedIn(true);
-    dataContext.setUserFormIsOpen(false);
-
+    dataContext.setIsLoggedIn(true);
+    dataContext.setFormIsOpen(false);
     if (
-      data.message === "duplicate username" ||
+      data.message === "duplicated email" ||
       data.message === "an error has occurred"
     ) {
       setSignupError(true);
@@ -41,6 +38,7 @@ function Login() {
     }
   };
 
+  // When user clicks on "Login" button
   const handleSubmitLogin = async (e) => {
     setSignupSuccess(false);
     setSignupError(false);
@@ -55,10 +53,10 @@ function Login() {
     const url = "http://127.0.0.1:4000/users/login";
     const res = await fetch(url, requestOptions);
     const data = await res.json();
-    setData(data);
+    dataContext.setUser(data.user);
     dataContext.setUserToken(data.access);
-    dataContext.setUserIsLoggedIn(true);
-    dataContext.setUserFormIsOpen(false);
+    dataContext.setIsLoggedIn(true);
+    setTimeout(disappear, 1500);
     console.log("Logged in as " + data.access);
     if (data.message === "login failed" || data.message === "not authorised") {
       setLoginError(true);
@@ -67,9 +65,13 @@ function Login() {
     }
   };
 
+  const disappear = () => {
+    dataContext.setFormIsOpen(false);
+  };
+
   return (
-    <div className="motion-safe:animate-fadeIn">
-      <div className="text-[#FEFEFE] font-barlow border-[13px] border-transparent">
+    <div className="motion-safe:animate-fadeIn bg-[#FDFBF9] border-[1px] border-white rounded-2xl p-6 fixed top-[170px] w-11/12 right-4">
+      <div className="text-[#25272C] font-poppins border-[13px] border-transparent">
         <form
           onSubmit={(e) => {
             // console.log e.NativeEvent to see
@@ -79,49 +81,67 @@ function Login() {
             if (buttonName === "login") handleSubmitLogin();
           }}
         >
-          <h3 className="font-extrabold">User Login/Signup</h3>
+          <h3 className="font-extrabold text-2xl">
+            WELCOME TO <br />
+            massDJ
+          </h3>
           <div>
-            <label>Email: </label>
+            <br />
+            <br />
+            <label className="font-bold text-sm">EMAIL ADDRESS </label>
           </div>
           <input
             type="email"
             onChange={(e) => setEmail(e.target.value)}
             value={email}
-            className="rounded-md border-2 mr-8 text-black"
-          />
+            className="block pt-2.5 pb-1.5 px-0 w-full text-sm text-[#25272C] bg-transparent border-0 border-b-2 border-[#25272C] appearance-none dark:text-white focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+            placeholder="email@email.com"
+            required="true"
+          />{" "}
+          <br />
+          <br />
           <div>
-            <label>Password: </label>
+            <label className="font-bold text-sm">PASSWORD </label>
           </div>
           <input
             type="password"
             onChange={(e) => setPassword(e.target.value)}
             value={password}
-            className="rounded-md border-2 mr-8 text-black"
+            className="block pt-2.5 pb-1.5 px-0 w-full text-sm text-[#25272C] bg-transparent border-0 border-b-2 border-[#25272C] appearance-none dark:text-white focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+            placeholder="at least 8 characters"
+            required="true"
+            minLength="8"
           />
-          <div className="text-black">
+          <div>
+            <br />
+            <br />
             <button
-              className="rounded-md border-2 mt-2 pl-2 pr-2 w-40 bg-zinc-300"
+              className="text-white bg-[#25272C] font-medium  text-sm px-5 py-2.5 text-center w-full"
               name="signup"
             >
-              Sign Up
+              Create an account
             </button>
             <div>
+              <br />
+
               <button
-                className="rounded-md border-2 mt-2 pl-2 pr-2 w-40 bg-zinc-300"
+                className="text-white bg-[#25272C] font-medium  text-sm px-5 py-2.5 text-center w-full"
                 name="login"
               >
-                Log In
+                Login
               </button>
             </div>
           </div>
         </form>
-        <div className="font-extrabold mt-4 mb-4 text-green-400">
+        <br />
+        <div className="mt-4 mb-4 text-green-400">
           {loginSuccess && "Successfully Logged In!"}
           <span className="text-red-400">
             {loginError && "Login Failed, Please Try Again!"}
           </span>
         </div>
-        <div className="font-extrabold mt-4 mb-4 text-green-400">
+        <br />
+        <div className="mt-4 mb-4 text-green-400">
           {signupSuccess && "Successfully Signed Up!"}
           <span className="text-red-400">
             {signupError && "Signup Failed, Please Try Again!"}
