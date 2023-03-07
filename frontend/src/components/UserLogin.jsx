@@ -27,7 +27,6 @@ function Login() {
     const res = await fetch(url, requestOptions);
     const data = await res.json();
     setData(data);
-    console.log(data);
     dataContext.setUserToken(data.access);
     dataContext.setUserIsLoggedIn(true);
     dataContext.setUserFormIsOpen(false);
@@ -69,19 +68,18 @@ function Login() {
   };
 
   return (
-    <>
-      <div className="text-[#FEFEFE] font-barlow ">
+    <div className="motion-safe:animate-fadeIn">
+      <div className="text-[#FEFEFE] font-barlow border-[13px] border-transparent">
         <form
           onSubmit={(e) => {
+            // console.log e.NativeEvent to see
             const buttonName = e.nativeEvent.submitter.name;
             e.preventDefault();
-            console.log(buttonName);
             if (buttonName === "signup") handleSubmitSignup();
             if (buttonName === "login") handleSubmitLogin();
           }}
         >
-          <h3 className="font-extrabold">New Sign Up / User Log In</h3>
-
+          <h3 className="font-extrabold">User Login/Signup</h3>
           <div>
             <label>Email: </label>
           </div>
@@ -130,7 +128,7 @@ function Login() {
           </span>
         </div>
       </div>
-    </>
+    </div>
   );
 }
 

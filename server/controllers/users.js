@@ -48,6 +48,7 @@ const login = async (req, res) => {
     const payload = {
       id: user._id,
       email: user.email,
+      isAdmin: user.isAdmin,
     };
 
     const access = jwt.sign(payload, process.env.ACCESS_SECRET, {
@@ -59,7 +60,7 @@ const login = async (req, res) => {
       expiresIn: "30D",
       jwtid: uuidv4(),
     });
-    const response = { access, refresh };
+    const response = { access, refresh, user };
     res.json(response);
   } catch (error) {
     // console.log("POST /users/login", error);
@@ -87,13 +88,6 @@ const refresh = (req, res) => {
   }
 };
 
-// Get all users (auth)
-const getUsers = async (req, res) => {
-  // console.log("req.decoded: " + req.decoded);
-  const users = await Users.find().select("email");
-  res.json(users);
-};
-
 // Get profile of a user (auth)
 const getUser = async (req, res) => {
   try {
@@ -113,7 +107,7 @@ const getUser = async (req, res) => {
 
 // Delete a user (auth)
 const deleteUser = async (req, res) => {
-  if (req.decoded.email === req.body.email) {
+  if (req.decoded.email === req.body.email || req.decoded.isAdmin) {
     try {
       const userToBeDeleted = await Users.deleteOne({
         email: req.body.email,
@@ -138,11 +132,35 @@ const deleteUser = async (req, res) => {
   }
 };
 
+// Get all users (authAdmin)
+const getUsersAdmin = async (req, res) => {
+  // console.log("req.decoded: " + req.decoded);
+  const users = await Users.find();
+  res.json(users);
+};
+
+// Update a user (authAdmin)
+// Take in an email and isAdmin boolean
+const updateUserAdmin = async (req, res) => {
+  const userEmail = req.body.email;
+  const isAdmin = req.body.isAdmin;
+
+  await Users.updateOne(
+    { _id: userEmail },
+    {
+      isAdmin: isAdmin,
+    }
+  );
+
+  res.json({ status: "ok", message: "updated" });
+};
+
 module.exports = {
   login,
   refresh,
-  getUsers,
   getUser,
   createUser,
   deleteUser,
+  getUsersAdmin,
+  updateUserAdmin,
 };

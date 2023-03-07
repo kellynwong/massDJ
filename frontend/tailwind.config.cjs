@@ -12,11 +12,21 @@ module.exports = {
     extend: {
       fontFamily: {
         myNerve: ['"Mynerve"'],
-        leagueSpartan: ['"LeagueSpartan"'],
         notoSansSc: ['"NotoSansSC"'],
         dosis: ['"Dosis"'],
         barlow: ['"Barlow"'],
         hind: ['"Hind"'],
+        poppins: ['"Poppins"'],
+      },
+      animation: {
+        fadeIn: "fadeIn 1s ease-in forwards",
+        bounceShort: "bounce 1s ease-in-out 2",
+      },
+      keyframes: {
+        fadeIn: {
+          "0%": { opacity: 0 },
+          "100%": { opacity: 1 },
+        },
       },
     },
   },

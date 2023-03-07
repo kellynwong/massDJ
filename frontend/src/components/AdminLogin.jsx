@@ -1,6 +1,7 @@
 import React, { useState, useContext } from "react";
 import DataContext from "../context/DataContext";
-
+import { RxCross2 } from "react-icons/rx";
+import { ErrorResponse } from "@remix-run/router";
 function AdminLogin() {
   const dataContext = useContext(DataContext);
   const [email, setEmail] = useState("");
@@ -55,9 +56,7 @@ function AdminLogin() {
     const res = await fetch(url, requestOptions);
     const data = await res.json();
     setData(data);
-    console.log(data);
     dataContext.setAdminIsLoggedIn(true);
-    dataContext.setAdminFormIsOpen(false);
     if (data.message === "login failed" || data.message === "not authorised") {
       setLoginError(true);
     } else {
@@ -65,53 +64,71 @@ function AdminLogin() {
     }
   };
 
+  // const handleClick = () => {
+  //   dataContext.setAdminFormIsOpen(false);
+  // };
+
   return (
-    <>
-      <div className="text-[#FEFEFE] font-NotoSansSc ">
+    <div className="motion-safe:animate-fadeIn bg-[#FDFBF9] border-[1px] border-white rounded-2xl p-6 fixed top-[170px] right-3.5">
+      {/* <RxCross2
+        className="hover:border-darkOrange hover:bg-buttonHoverOrange hover:border-1 rounded-full text-[1.3rem] inline drop-shadow-3xl fixed right-10"
+        onClick={handleClick}
+      /> */}
+      <div className="text-[#25272C] font-poppins border-[13px] border-transparent">
         <form
           onSubmit={(e) => {
+            // console.log e.NativeEvent to see
             const buttonName = e.nativeEvent.submitter.name;
             e.preventDefault();
-            console.log(buttonName);
             if (buttonName === "signup") handleSubmitSignup();
             if (buttonName === "login") handleSubmitLogin();
           }}
         >
-          <h3 className="font-extrabold">
-            New Sign Up / Restaurant Admin Log In
-          </h3>
+          <h3 className="font-extrabold text-lg">WELCOME RESTAURANT ADMIN</h3>
           <div>
-            <label>Email: </label>
+            <br />
+            <br />
+            <label className="font-bold text-sm">EMAIL ADDRESS </label>
           </div>
           <input
             type="email"
             onChange={(e) => setEmail(e.target.value)}
             value={email}
-            className="rounded-md border-2 mr-8 text-black"
-          />
+            className="block pt-2.5 pb-1.5 px-0 w-full text-sm text-[#25272C] bg-transparent border-0 border-b-2 border-[#25272C] appearance-none dark:text-white focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+            placeholder="email@email.com"
+            required="true"
+          />{" "}
+          <br />
+          <br />
           <div>
-            <label>Password: </label>
+            <label className="font-bold text-sm">PASSWORD </label>
           </div>
           <input
             type="password"
             onChange={(e) => setPassword(e.target.value)}
             value={password}
-            className="rounded-md border-2 mr-8 text-black"
+            className="block pt-2.5 pb-1.5 px-0 w-full text-sm text-[#25272C] bg-transparent border-0 border-b-2 border-[#25272C] appearance-none dark:text-white focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+            placeholder="at least 8 characters"
+            required="true"
+            minLength="8"
           />
-
           <div className="text-black">
+            <br />
+            <br />
             <button
-              className="rounded-md border-2 mt-2 pl-2 pr-2 w-40 bg-zinc-300"
+              className="text-white bg-[#25272C] font-medium  text-sm px-5 py-2.5 text-center w-full"
               name="signup"
             >
-              Sign Up
+              Create an account
             </button>
             <div>
+              <br />
+
               <button
-                className="rounded-md border-2 mt-2 pl-2 pr-2 w-40 bg-zinc-300"
+                className="text-white bg-[#25272C] font-medium  text-sm px-5 py-2.5 text-center w-full"
                 name="login"
               >
-                Log In
+                Login
               </button>
             </div>
           </div>
@@ -129,7 +146,7 @@ function AdminLogin() {
           </span>
         </div>
       </div>
-    </>
+    </div>
   );
 }
 
