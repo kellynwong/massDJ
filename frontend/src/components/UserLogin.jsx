@@ -1,13 +1,11 @@
 import React, { useState, useContext } from "react";
 import DataContext from "../context/DataContext";
-import Playlist from "./Playlist";
 
 function Login() {
   const dataContext = useContext(DataContext);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [data, setData] = useState("");
-  const [users, setUsers] = useState([]);
   const [loginSuccess, setLoginSuccess] = useState(false);
   const [loginError, setLoginError] = useState(false);
   const [signupSuccess, setSignupSuccess] = useState(false);
@@ -31,6 +29,8 @@ function Login() {
     setData(data);
     console.log(data);
     dataContext.setUserToken(data.access);
+    dataContext.setUserIsLoggedIn(true);
+    dataContext.setUserFormIsOpen(false);
 
     if (
       data.message === "duplicate username" ||
@@ -58,6 +58,8 @@ function Login() {
     const data = await res.json();
     setData(data);
     dataContext.setUserToken(data.access);
+    dataContext.setUserIsLoggedIn(true);
+    dataContext.setUserFormIsOpen(false);
     console.log("Logged in as " + data.access);
     if (data.message === "login failed" || data.message === "not authorised") {
       setLoginError(true);
@@ -66,25 +68,9 @@ function Login() {
     }
   };
 
-  // const handleClick = async () => {
-  //   const token = data.access;
-  //   const requestOptions = {
-  //     method: "GET",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //       Authorization: `Bearer ${token}`,
-  //     },
-  //   };
-  //   const url = "http://127.0.0.1:4000/users";
-  //   const res = await fetch(url, requestOptions);
-  //   const users = await res.json();
-  //   setUsers(users);
-  //   console.log(users);
-  // };
-
   return (
     <>
-      <div>
+      <div className="text-[#FEFEFE] font-barlow ">
         <form
           onSubmit={(e) => {
             const buttonName = e.nativeEvent.submitter.name;
@@ -96,21 +82,25 @@ function Login() {
         >
           <h3 className="font-extrabold">New Sign Up / User Log In</h3>
 
-          <label>Email: </label>
+          <div>
+            <label>Email: </label>
+          </div>
           <input
             type="email"
             onChange={(e) => setEmail(e.target.value)}
             value={email}
-            className="rounded-md border-2 mr-8"
+            className="rounded-md border-2 mr-8 text-black"
           />
-          <label>Password: </label>
+          <div>
+            <label>Password: </label>
+          </div>
           <input
             type="password"
             onChange={(e) => setPassword(e.target.value)}
             value={password}
-            className="rounded-md border-2 mr-8"
+            className="rounded-md border-2 mr-8 text-black"
           />
-          <div>
+          <div className="text-black">
             <button
               className="rounded-md border-2 mt-2 pl-2 pr-2 w-40 bg-zinc-300"
               name="signup"
@@ -139,27 +129,7 @@ function Login() {
             {signupError && "Signup Failed, Please Try Again!"}
           </span>
         </div>
-        {/* <button
-          className="rounded-md border-2 mt-4 w-80"
-          type="submit"
-          value="Update"
-          onClick={handleClick}
-        >
-          For Testing User Log In: Get All Users
-        </button>
-        {users.map((user, index) => {
-          return (
-            <table className="border-2 w-80 flex justify-center items-center">
-              <tbody>
-                <tr>
-                  <td key={index}>{user.email}</td>
-                </tr>
-              </tbody>
-            </table>
-          );
-        })} */}
       </div>
-      <Playlist />
     </>
   );
 }

@@ -1,15 +1,19 @@
 import React, { useState, useEffect } from "react";
 import DataContext from "./context/DataContext";
-import UserLogin from "./components/UserLogin";
-import AdminLogin from "./components/AdminLogin";
 import SpotifyLogin from "./components/SpotifyLogin";
 import SpotifyPlayer from "./components/SpotifyPlayer";
+import Playlist from "./components/Playlist";
+import Headers from "./components/Headers";
 
 function App() {
   const [spotifyToken, setSpotifyToken] = useState("");
   const [userToken, setUserToken] = useState("");
   const [userIsLoggedIn, setUserIsLoggedIn] = useState(false);
+  const [adminIsLoggedIn, setAdminIsLoggedIn] = useState(false);
+  const [adminFormIsOpen, setAdminFormIsOpen] = useState(false);
+  const [userFormIsOpen, setUserFormIsOpen] = useState(false);
 
+  // Get spotiify token
   useEffect(() => {
     async function getSpotifyToken() {
       const response = await fetch("/auth/token");
@@ -26,10 +30,24 @@ function App() {
         setUserToken,
         userIsLoggedIn,
         setUserIsLoggedIn,
+        adminIsLoggedIn,
+        setAdminIsLoggedIn,
+        adminFormIsOpen,
+        setAdminFormIsOpen,
+        userFormIsOpen,
+        setUserFormIsOpen,
       }}
     >
-      <div className="bg-gray-500">
-        <div className="font-extrabold mt-16 rounded-md border-2 w-40 bg-[#44c767] text-[#ffffff] p-2 ml-40">
+      <div className="bg-[#181818] rounded-3xl border-transparent border-4 relative">
+        <span className="absolute ml-[168px] border border-[#8B8B8B] bg-[#8B8B8B] w-16 h-2 mt-2 rounded-full"></span>
+        <Headers />
+        <div className="text-white font-bold mt-[-10px] text-lg text-left border-[13px] border-transparent">
+          Good morning
+        </div>
+        <div>
+          <div>
+            <Playlist />
+          </div>
           <div>
             {spotifyToken === "" ? (
               <SpotifyLogin />
@@ -37,12 +55,6 @@ function App() {
               <SpotifyPlayer token={spotifyToken} />
             )}
           </div>
-        </div>
-        <div className="mt-16 p-2">
-          <UserLogin />
-        </div>
-        <div className="mt-16 p-2">
-          <AdminLogin />
         </div>
       </div>
     </DataContext.Provider>

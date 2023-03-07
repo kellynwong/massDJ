@@ -12,6 +12,11 @@ module.exports = {
     extend: {
       fontFamily: {
         myNerve: ['"Mynerve"'],
+        leagueSpartan: ['"LeagueSpartan"'],
+        notoSansSc: ['"NotoSansSC"'],
+        dosis: ['"Dosis"'],
+        barlow: ['"Barlow"'],
+        hind: ['"Hind"'],
       },
     },
   },

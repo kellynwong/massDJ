@@ -22,6 +22,11 @@ function Playlist() {
         const url = "http://localhost:3000/playlist";
         const res = await fetch(url, requestOptions);
         const playlist = await res.json();
+
+        // Map and sort (descending by count) playlist
+        playlist.sort(function (a, b) {
+          return b.count - a.count;
+        });
         setPlaylist(playlist);
       };
       displaySongs();
@@ -98,42 +103,54 @@ function Playlist() {
   };
 
   return (
-    <>
-      {playlist.map((song, index) => {
-        return (
-          <table className="border-2 w-3/5 flex justify-left items-center bg-[#333333] text-[#FEFEFE] font-myNerve">
-            <tbody>
+    <div className="border-[13px] border-transparent">
+      <table className="bg-[#10181D] text-[#8B8B8B] font-barlow text-sm text-left">
+        <thead className="w-full text-sm text-left">
+          <tr className="border-b border-[#8B8B8B]">
+            <th className="pb-4">Title</th>
+            <th className="pb-4"></th>
+            <th className="pb-4">Status</th>
+            <th className="pb-4">#</th>
+            <th className="pb-4">Vote</th>
+          </tr>
+        </thead>
+        <tbody>
+          {playlist.map((song, index) => {
+            return (
               <tr key={index}>
-                <td className="w-1/5 h-1/5">
+                <td className="w-1/6 h-1/6 pt-6 pr-2">
                   <img src={song.imgUrl} />
                 </td>
-                <td className="w-1/5 h-1/5">{song.artist}</td>
-                <td className="w-1/5 h-1/5">{song.title}</td>
-                <td className="w-1/5 h-1/5">
+                <td className="w-3/6 h-3/6 pt-6">
+                  <div className="text-[#FEFEFE] font-bold"> {song.title}</div>
+                  <div className="font-thin"> {song.artist}</div>
+                </td>
+
+                <td className="w-1/6 h-1/6 pt-4">
                   <button type="text" value={song._id} onClick={handleClick}>
-                    Play Now
+                    <div className="text-left">Play Now</div>
                   </button>
                 </td>
 
-                <td className="w-1/5 h-1/5">{song.count || 0} votes</td>
+                <td className="w-1/6 h-1/6 pt-4">{song.count}</td>
 
                 {song.votedBefore ? (
-                  <h4>You Have Voted Before</h4>
+                  <div className="w-1/6 h-1/6 pt-8">NA</div>
                 ) : (
-                  <td className="w-1/5 h-1/5">
+                  <td className="w-1/6 h-1/6 pt-6">
                     <button onClick={() => handleChange(song._id, 1)}>+</button>
-                    Vote
+                    <br />
                     <button onClick={() => handleChange(song._id, -1)}>
                       -
                     </button>
                   </td>
                 )}
               </tr>
-            </tbody>
-          </table>
-        );
-      })}
-    </>
+            );
+          })}
+        </tbody>
+      </table>
+    </div>
   );
 }
 
