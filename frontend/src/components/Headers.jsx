@@ -1,3 +1,4 @@
+import { data } from "autoprefixer";
 import React, { useContext } from "react";
 import DataContext from "../context/DataContext";
 import Login from "./Login";
@@ -11,22 +12,31 @@ const Headers = () => {
       : dataContext.setFormIsOpen(true);
   };
 
+  const handleLogout = async () => {
+    await fetch("/api/users/logout", { method: "POST" });
+    dataContext.setUser("");
+  };
+
   return (
     <>
       <div className="inline-flex">
         {/* massDJ logo */}
         <div>
-          <img className="w-28 h-28 " src="src/assets/massDJ.png" />
+          <img className="w-28 h-28 " src="/src/assets/massDJ.png" />
         </div>
 
         {/* Login logo*/}
         <div className="mt-1 ml-48">
-          {dataContext.isLoggedIn ? (
-            <img className="w-16 h-16" src="src/assets/login.png" />
+          {dataContext.user.email ? (
+            <img
+              className="w-16 h-16"
+              src="/src/assets/login.png"
+              onClick={handleLogout}
+            />
           ) : (
             <img
               className="w-16 h-16"
-              src="src/assets/notLogin.png"
+              src="/src/assets/notLogin.png"
               onClick={handleLoginSignup}
             />
           )}

@@ -23,10 +23,9 @@ function Login() {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, password }),
     };
-    const url = "http://127.0.0.1:4000/users";
+    const url = "/api/users";
     const res = await fetch(url, requestOptions);
     const data = await res.json();
-    dataContext.setIsLoggedIn(true);
     dataContext.setFormIsOpen(false);
     if (
       data.message === "duplicated email" ||
@@ -50,12 +49,11 @@ function Login() {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, password }),
     };
-    const url = "http://127.0.0.1:4000/users/login";
+    const url = "/api/users/login";
     const res = await fetch(url, requestOptions);
     const data = await res.json();
     dataContext.setUser(data.user);
     dataContext.setUserToken(data.access);
-    dataContext.setIsLoggedIn(true);
     setTimeout(disappear, 1500);
     console.log("Logged in as " + data.access);
     if (data.message === "login failed" || data.message === "not authorised") {

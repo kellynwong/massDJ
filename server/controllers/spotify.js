@@ -30,7 +30,7 @@ const spotifyLogin = async (req, res) => {
     response_type: "code",
     client_id: spotify_client_id,
     scope: scope,
-    redirect_uri: "http://localhost:3000/auth/callback",
+    redirect_uri: process.env.EXTERNAL_URL_HOST + "api/auth/callback",
     state: state,
   });
   res.redirect(
@@ -47,7 +47,7 @@ const spotifyCallback = async (req, res) => {
     url: "https://accounts.spotify.com/api/token",
     form: {
       code: code,
-      redirect_uri: "http://localhost:3000/auth/callback",
+      redirect_uri: process.env.EXTERNAL_URL_HOST + "api/auth/callback",
       grant_type: "authorization_code",
     },
     headers: {
@@ -72,13 +72,15 @@ const spotifyCallback = async (req, res) => {
 
 // Token
 const spotifyToken = async (req, res) => {
+  if (!access_token) {
+  }
   res.json({
     access_token: access_token,
   });
 };
 
-// populate and play random song
-const playSong = async (req, res) => {
+// populatePlaylist
+const populatePlaylist = async (req, res) => {
   // Get current user profile, i.e. get user id here
   let url = "https://api.spotify.com/v1/me";
   const requestOptions = {
@@ -121,32 +123,6 @@ const playSong = async (req, res) => {
   await Playlist.insertMany(seedSongs);
   console.log("Seeded db with spotify playlist!");
 
-  // Start and resume playback of random song using spotify uri from above
-  let randomizedSongs = userPlaylistSongsJSON.items.sort(
-    () => 0.5 - Math.random()
-  );
-
-  for (const item of randomizedSongs) {
-    if (item.track) {
-      if (item.track.available_markets.includes("SG")) {
-        songURI = item.track.uri;
-        console.log(songURI + ": " + item.track.name);
-      }
-    }
-  }
-
-  url = "https://api.spotify.com/v1/me/player/play";
-  playRequestOptions = {
-    method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${access_token}`,
-    },
-    body: JSON.stringify({
-      uris: [songURI],
-    }),
-  };
-  const song = await fetch(url, playRequestOptions);
   // const songJSON = await song.json();
   res.status(200).json({ userPlaylistSongsJSON });
 };
@@ -196,21 +172,29 @@ const playNextSongAtEndOfCurrentSong = async (req, res) => {
   currentlyPlayingJSON = await currentlyPlayingResponse.json();
 
   const progress_ms = currentlyPlayingJSON.progress_ms;
-  console.log("progress_ms: " + progress_ms);
-
   const duration_ms = currentlyPlayingJSON.item?.duration_ms;
-  console.log("duration_ms: " + duration_ms);
-
   const is_playing = currentlyPlayingJSON.is_playing;
-  console.log("is_playing: " + is_playing);
-
   const name = currentlyPlayingJSON.item?.name;
-  console.log("name: " + name);
 
-  if (duration_ms - progress_ms < 1000 || is_playing === false) {
-    await findNextVotedSong();
-    res.status(200).json({ status: "ok", message: "played successfully" });
-    return;
+  console.log(
+    `Song: ${name} - ${progress_ms}/${duration_ms} is_playing: ${is_playing}`
+  );
+
+  if (duration_ms - progress_ms < 2000 || is_playing === false) {
+    // if the last played song was within 10s ago, don't play another song
+    const lastSongPlayed = await Playlist.findOne(
+      {},
+      {},
+      { sort: { lastPlayed: -1 } }
+    );
+    const timeSinceLastSongMs = new Date() - lastSongPlayed.lastPlayed;
+    if (timeSinceLastSongMs > 10000) {
+      await findNextVotedSong();
+      res.status(200).json({ status: "ok", message: "played successfully" });
+      return;
+    } else {
+      // console.log("Next song still loading");
+    }
   }
 
   res.status(200).json({ progress_ms, duration_ms, is_playing, name });
@@ -218,9 +202,13 @@ const playNextSongAtEndOfCurrentSong = async (req, res) => {
 
 // Find next voted song
 const findNextVotedSong = async () => {
-  const songs = await Playlist.find();
+  const songs = await Playlist.find(
+    {},
+    {},
+    { sort: { count: -1, lastPlayed: 1 } }
+  );
   let mostVotes = 0;
-  let mostVotedSongTrackUrl;
+  let mostVotedSongTrackUrl = songs[0].trackUrl;
   for (let x = 0; x < songs.length; x++) {
     if (songs[x]?.count > mostVotes) {
       mostVotes = songs[x].count;
@@ -260,7 +248,7 @@ module.exports = {
   spotifyLogin,
   spotifyCallback,
   spotifyToken,
-  playSong,
+  populatePlaylist,
   playSelectedSong,
   playNextSongAtEndOfCurrentSong,
 };

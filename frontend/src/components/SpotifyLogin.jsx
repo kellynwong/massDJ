@@ -6,7 +6,7 @@ function SpotifyLogin() {
       <header className="App-header">
         <a
           className="btn-spotify border-[13px] border-transparent font-bold text-green-400"
-          href="/auth/login"
+          href="/api/auth/login"
         >
           Login with Spotify
         </a>

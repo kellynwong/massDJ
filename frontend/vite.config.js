@@ -8,17 +8,7 @@ export default defineConfig({
   server: {
     port: 3000,
     proxy: {
-      "/auth": {
-        target: "http://localhost:4000",
-        changeOrigin: true,
-        secure: false,
-      },
-      "/playlist": {
-        target: "http://localhost:4000",
-        changeOrigin: true,
-        secure: false,
-      },
-      "/song": {
+      "/api": {
         target: "http://localhost:4000",
         changeOrigin: true,
         secure: false,

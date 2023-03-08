@@ -52,7 +52,7 @@ const login = async (req, res) => {
     };
 
     const access = jwt.sign(payload, process.env.ACCESS_SECRET, {
-      expiresIn: "20m",
+      expiresIn: "1D",
       jwtid: uuidv4(),
     });
 
@@ -61,11 +61,23 @@ const login = async (req, res) => {
       jwtid: uuidv4(),
     });
     const response = { access, refresh, user };
+
+    res.cookie("access", access, { maxAge: 60 * 1000 * 60 * 24 });
+    res.cookie("refresh", refresh, { maxAge: 60 * 1000 * 60 * 24 });
+
     res.json(response);
   } catch (error) {
     // console.log("POST /users/login", error);
     res.status(400).json({ status: "error", message: "login failed" });
   }
+};
+
+// Logout
+const logout = async (req, res) => {
+  res.cookie("access", "loggedout", { maxAge: 1 });
+  res.cookie("refresh", "loggedout", { maxAge: 1 });
+
+  res.json({ status: "bye" });
 };
 
 // Refresh token (not protected)
@@ -77,10 +89,13 @@ const refresh = (req, res) => {
       email: decoded.email,
     };
     const access = jwt.sign(payload, process.env.ACCESS_SECRET, {
-      expiresIn: "20m",
+      expiresIn: "1D",
       jwtid: uuidv4(),
     });
-    const response = { access };
+
+    res.cookie("access", access, { maxAge: 60 * 1000 * 60 * 24 });
+
+    const response = { status: "ok" };
     res.json(response);
   } catch (error) {
     // console.log("POST /users/refresh", error);
@@ -157,6 +172,7 @@ const updateUserAdmin = async (req, res) => {
 
 module.exports = {
   login,
+  logout,
   refresh,
   getUser,
   createUser,

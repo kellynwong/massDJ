@@ -3,15 +3,13 @@ require("dotenv").config();
 const jwt = require("jsonwebtoken");
 
 const auth = (req, res, next) => {
-  const token = req.headers["authorization"].replace("Bearer ", "");
-  // console.log("token replacing bearer: " + token);
+  const token = req.cookies.access;
 
   if (token) {
     try {
       const decoded = jwt.verify(token, process.env.ACCESS_SECRET);
       req.userEmail = decoded.email;
       req.decoded = decoded;
-      // console.log("decoded: " + decoded);
       next();
     } catch (error) {
       return res.status(401).send({
@@ -28,8 +26,7 @@ const auth = (req, res, next) => {
 };
 
 const authAdmin = (req, res, next) => {
-  const token = req.headers["authorization"]?.replace("Bearer ", "");
-  // console.log("token replacing bearer: " + token);
+  const token = req.cookies.access;
 
   if (token) {
     try {
@@ -61,7 +58,7 @@ const authAdmin = (req, res, next) => {
 
 const authOptional = (req, res, next) => {
   // put ? as guard, otherwise for users without authorization headers, will throw error: TypeError: Cannot read properties of undefined (reading 'replace')
-  const token = req.headers["authorization"]?.replace("Bearer ", "");
+  const token = req.cookies.access;
 
   if (token) {
     try {

@@ -5,7 +5,11 @@ const uuid = require("uuid");
 // to load songs at homepage, and when loads, assign a cookie if cookie does not exist
 const getPlaylist = async (req, res) => {
   // lean will give me back the entire JSON, will then allow me to change it like an object, i.e. add new property
-  const songs = await Playlist.find().lean();
+  const songs = await Playlist.find(
+    {},
+    {},
+    { sort: { count: -1, lastPlayed: 1 } }
+  ).lean();
   if (!req.cookies.machineId) {
     let cookieName = "machineId";
     let cookieValue = uuid.v4();

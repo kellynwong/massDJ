@@ -103,26 +103,6 @@ function SpotifyPlayer(props) {
 
               <button
                 onClick={() => {
-                  player.previousTrack();
-                }}
-              >
-                <RiSkipBackLine className="text-[22px]" />
-              </button>
-
-              <button
-                onClick={() => {
-                  player.togglePlay();
-                }}
-              >
-                {is_paused ? (
-                  <RiPlayCircleLine className="text-[22px]" />
-                ) : (
-                  <RiPauseCircleLine className="text-[22px]" />
-                )}
-              </button>
-
-              <button
-                onClick={() => {
                   player.nextTrack();
                 }}
               >

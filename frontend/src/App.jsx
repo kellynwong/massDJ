@@ -16,7 +16,6 @@ const track = {
 function App() {
   const [spotifyToken, setSpotifyToken] = useState("");
   const [userToken, setUserToken] = useState("");
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [formIsOpen, setFormIsOpen] = useState(false);
   const [user, setUser] = useState("");
   const [current_track, setTrack] = useState(track);
@@ -24,22 +23,30 @@ function App() {
   // Get spotiify token
   useEffect(() => {
     async function getSpotifyToken() {
-      const response = await fetch("/auth/token");
+      const response = await fetch("/api/auth/token");
       const json = await response.json();
       setSpotifyToken(json.access_token);
     }
     getSpotifyToken();
+
+    async function getUser() {
+      try {
+        const response = await fetch("/api/users/profile");
+        const user = await response.json();
+        setUser(user);
+      } catch (error) {
+        // not logged in
+      }
+    }
+    getUser();
   }, []);
 
-  console.log(user);
   return (
     <DataContext.Provider
       value={{
         setSpotifyToken,
         userToken,
         setUserToken,
-        isLoggedIn,
-        setIsLoggedIn,
         formIsOpen,
         setFormIsOpen,
         user,
@@ -51,9 +58,11 @@ function App() {
       <div className="bg-[#181818] rounded-3xl border-transparent border-4 relative">
         <span className="absolute ml-[168px] border border-[#8B8B8B] bg-[#8B8B8B] w-16 h-2 mt-2 rounded-full"></span>
         <Headers />
-        <div className="mt-[-10px] text-[#8B8B8B] font-barlow text-lg text-left border-[13px] border-transparent">
-          Currently Playing:
-        </div>
+        {user.email ? (
+          <div className="mt-[-10px] text-[#8B8B8B] font-barlow text-lg text-left border-[13px] border-transparent">
+            Welcome {user.email}!
+          </div>
+        ) : null}
         <div>
           {user.isAdmin &&
             (spotifyToken === "" ? (

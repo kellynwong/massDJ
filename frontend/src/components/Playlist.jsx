@@ -11,22 +11,8 @@ function Playlist() {
     const interval = setInterval(() => {
       // console.log("This will run every second!");
       const displaySongs = async () => {
-        // console.log("Making request with userToken: " + dataContext.userToken);
-        const requestOptions = {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${dataContext.userToken}`,
-          },
-        };
-        const url = "http://localhost:3000/playlist";
-        const res = await fetch(url, requestOptions);
+        const res = await fetch("/api/playlist");
         const playlist = await res.json();
-
-        // Map and sort (descending by count) playlist
-        playlist.sort(function (a, b) {
-          return b.count - a.count;
-        });
         setPlaylist(playlist);
       };
       displaySongs();
@@ -43,15 +29,7 @@ function Playlist() {
       if (dataContext.user.isAdmin) {
         // console.log("This too shall run?");
         const currentlyPlaying = async () => {
-          const requestOptions = {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${dataContext.userToken}`,
-            },
-          };
-          const url = "http://localhost:4000/pollqueue";
-          const res = await fetch(url, requestOptions);
+          const res = await fetch("/api/pollqueue");
           const currentSong = await res.json();
           if (currentSong.duration_ms) {
             setCurrentSong(currentSong);
@@ -74,16 +52,15 @@ function Playlist() {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${dataContext.userToken}`,
       },
       body: JSON.stringify({
         id: songId,
       }),
     };
 
-    const url = "http://localhost:3000/song";
+    const url = "/api/song";
     const res = await fetch(url, requestOptions);
-    const song = await res.json();
+    await res.json();
   };
 
   const handleChange = async (id, voting) => {
@@ -91,14 +68,13 @@ function Playlist() {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${dataContext.userToken}`,
       },
       body: JSON.stringify({
         id: id,
         vote: voting,
       }),
     };
-    const url = "http://localhost:3000/playlist";
+    const url = "/api/playlist";
     const res = await fetch(url, requestOptions);
     const vote = await res.json();
   };

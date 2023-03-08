@@ -10,6 +10,7 @@ const port = 4000;
 
 const {
   login,
+  logout,
   refresh,
   getUser,
   createUser,
@@ -22,7 +23,7 @@ const {
   spotifyLogin,
   spotifyCallback,
   spotifyToken,
-  playSong,
+  populatePlaylist,
   playSelectedSong,
   playNextSongAtEndOfCurrentSong,
 } = require("./controllers/spotify");
@@ -44,30 +45,31 @@ connectDB();
 app.use("/", router);
 
 // users
-router.post("/users", createUser);
-router.post("/users/login", login); // for admin to log in now (combined database now with a flag showing whether isAdmin (boolean))
-router.post("/users/refresh", refresh);
-router.get("/users/profile", auth, getUser);
-router.delete("/users", auth, deleteUser);
+router.post("/api/users", createUser);
+router.post("/api/users/login", login); // for admin to log in now (combined database now with a flag showing whether isAdmin (boolean))
+router.post("/api/users/refresh", refresh);
+router.get("/api/users/profile", auth, getUser);
+router.delete("/api/users", auth, deleteUser);
+router.post("/api/users/logout", auth, logout);
 
 // admin
-router.get("/admin/users", authAdmin, getUsersAdmin);
-router.put("/admin/users", authAdmin, updateUserAdmin);
-router.delete("/admin/users", authAdmin, deleteUser);
-router.get("/auth/login", spotifyLogin); // need to add in authAdmin here later (Wednesday)
-router.get("/auth/token", spotifyToken);
-router.get("/auth/callback", spotifyCallback);
+router.get("/api/admin/users", authAdmin, getUsersAdmin);
+router.put("/api/admin/users", authAdmin, updateUserAdmin);
+router.delete("/api/admin/users", authAdmin, deleteUser);
+router.get("/api/auth/login", spotifyLogin); // need to add in authAdmin here later (Wednesday)
+router.get("/api/auth/token", spotifyToken);
+router.get("/api/auth/callback", spotifyCallback);
 // spotify
-router.get("/populate", playSong);
-router.put("/song", authAdmin, playSelectedSong);
-router.get("/pollqueue", authAdmin, playNextSongAtEndOfCurrentSong); // if authAdmin, the next track will not play
+router.get("/api/populate", populatePlaylist);
+router.put("/api/song", authAdmin, playSelectedSong);
+router.get("/api/pollqueue", authAdmin, playNextSongAtEndOfCurrentSong); // if authAdmin, the next track will not play
 
 // playlist
-router.get("/playlist", authOptional, getPlaylist); // get songs
-router.put("/playlist", authOptional, updatePlaylist); // for voting
+router.get("/api/playlist", authOptional, getPlaylist); // get songs
+router.put("/api/playlist", authOptional, updatePlaylist); // for voting
 
 // accounthistory
-router.get("/accounthistory", auth, getAccountHistory);
+router.get("/api/accounthistory", auth, getAccountHistory);
 
 app.listen(port, () => {
   console.log(`Listening at http://localhost:${port}`);
