@@ -1,22 +1,24 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
+import DataContext from "../context/DataContext";
 import { RiSkipForwardLine } from "react-icons/ri";
 import { RiSkipBackLine } from "react-icons/ri";
 import { RiPlayCircleLine } from "react-icons/ri";
 import { RiPauseCircleLine } from "react-icons/ri";
 
-const track = {
-  name: "",
-  album: {
-    images: [{ url: "" }],
-  },
-  artists: [{ name: "" }],
-};
+// const track = {
+//   name: "",
+//   album: {
+//     images: [{ url: "" }],
+//   },
+//   artists: [{ name: "" }],
+// };
 
 function SpotifyPlayer(props) {
   const [is_paused, setPaused] = useState(false);
   const [is_active, setActive] = useState(false);
   const [player, setPlayer] = useState(undefined);
-  const [current_track, setTrack] = useState(track);
+  // const [current_track, setTrack] = useState(track);
+  const dataContext = useContext(DataContext);
 
   useEffect(() => {
     const script = document.createElement("script");
@@ -63,7 +65,7 @@ function SpotifyPlayer(props) {
           return;
         }
 
-        setTrack(state.track_window.current_track);
+        dataContext.setTrack(state.track_window.current_track);
         setPaused(state.paused);
 
         player.getCurrentState().then((state) => {
@@ -78,8 +80,8 @@ function SpotifyPlayer(props) {
   if (!is_active) {
     return (
       <>
-        <div className="container">
-          <div className="main-wrapper">
+        <div>
+          <div>
             <b>
               {" "}
               Instance not active. Transfer your playback using your Spotify app{" "}
@@ -91,47 +93,40 @@ function SpotifyPlayer(props) {
   } else {
     return (
       <>
-        <div className="container border-[13px] border-transparent font-barlow text-[15px] text-[#8B8B8B] ">
-          <div className="main-wrapper ml-7">
-            <img
-              src={current_track.album.images[0].url}
-              className="now-playing__cover"
-              alt=""
-            />
+        <div className="border-[13px] border-transparent font-barlow text-[15px] text-[#8B8B8B] ">
+          <div className="ml-7">
+            <img src={dataContext.current_track.album.images[0].url} alt="" />
 
-            <div className="now-playing__side mt-4 text-center">
-              <div className="now-playing__name font-bold">
-                {current_track.name}
-              </div>
-              <div className="now-playing__artist">
-                {current_track.artists[0].name}
-              </div>
+            <div className="mt-4 ml-[-10px] text-center">
+              <div className="font-bold">{dataContext.current_track.name}</div>
+              <div>{dataContext.current_track.artists[0].name}</div>
 
               <button
-                className="btn-spotify"
                 onClick={() => {
                   player.previousTrack();
                 }}
               >
-                <RiSkipBackLine />
+                <RiSkipBackLine className="text-[22px]" />
               </button>
 
               <button
-                className="btn-spotify"
                 onClick={() => {
                   player.togglePlay();
                 }}
               >
-                {is_paused ? <RiPlayCircleLine /> : <RiPauseCircleLine />}
+                {is_paused ? (
+                  <RiPlayCircleLine className="text-[22px]" />
+                ) : (
+                  <RiPauseCircleLine className="text-[22px]" />
+                )}
               </button>
 
               <button
-                className="btn-spotify"
                 onClick={() => {
                   player.nextTrack();
                 }}
               >
-                <RiSkipForwardLine />
+                <RiSkipForwardLine className="text-[22px]" />
               </button>
             </div>
           </div>

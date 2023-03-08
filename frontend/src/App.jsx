@@ -5,12 +5,21 @@ import SpotifyPlayer from "./components/SpotifyPlayer";
 import Playlist from "./components/Playlist";
 import Headers from "./components/Headers";
 
+const track = {
+  name: "",
+  album: {
+    images: [{ url: "" }],
+  },
+  artists: [{ name: "" }],
+};
+
 function App() {
   const [spotifyToken, setSpotifyToken] = useState("");
   const [userToken, setUserToken] = useState("");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [formIsOpen, setFormIsOpen] = useState(false);
   const [user, setUser] = useState("");
+  const [current_track, setTrack] = useState(track);
 
   // Get spotiify token
   useEffect(() => {
@@ -35,6 +44,8 @@ function App() {
         setFormIsOpen,
         user,
         setUser,
+        current_track,
+        setTrack,
       }}
     >
       <div className="bg-[#181818] rounded-3xl border-transparent border-4 relative">

@@ -105,12 +105,25 @@ function Playlist() {
 
   return (
     <div className="border-[13px] border-transparent">
+      {/* Show currently playing song to users (no controls)*/}
+      {dataContext.user.isAdmin ? null : (
+        <div className="border-[13px] border-transparent font-barlow text-[15px] text-[#8B8B8B]">
+          <div className="ml-4">
+            <img src={dataContext.current_track.album.images[0].url} alt="" />
+          </div>
+          <div className="mt-4 text-center">
+            <div className="font-bold">{dataContext.current_track.name}</div>
+            <div>{dataContext.current_track.artists[0].name}</div>
+          </div>
+        </div>
+      )}
+
       <table className="bg-[#10181D] text-[#8B8B8B] font-barlow text-sm text-left">
         <thead className="w-full text-sm text-left">
           <tr className="border-b border-[#8B8B8B]">
             <th className="pb-4">Title</th>
             <th className="pb-4"></th>
-            <th className="pb-4">Status</th>
+            {dataContext.user.isAdmin && <th className="pb-4">Admin</th>}
             <th className="pb-4">#</th>
             <th className="pb-4">Vote</th>
           </tr>
@@ -126,17 +139,18 @@ function Playlist() {
                   <div className="text-[#FEFEFE] font-bold"> {song.title}</div>
                   <div className="font-thin"> {song.artist}</div>
                 </td>
-
-                <td className="w-1/6 h-1/6 pt-4">
-                  <button
-                    type="text"
-                    value={song._id}
-                    onClick={handleClick}
-                    className="text-left"
-                  >
-                    Play Now
-                  </button>
-                </td>
+                {dataContext.user.isAdmin && (
+                  <td className="w-1/6 h-1/6 pt-4">
+                    <button
+                      type="text"
+                      value={song._id}
+                      onClick={handleClick}
+                      className="text-left"
+                    >
+                      Play Now
+                    </button>
+                  </td>
+                )}
 
                 <td className="w-1/6 h-1/6 pt-4">{song.count}</td>
 
