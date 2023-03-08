@@ -40,7 +40,7 @@ function App() {
       <div className="bg-[#181818] rounded-3xl border-transparent border-4 relative">
         <span className="absolute ml-[168px] border border-[#8B8B8B] bg-[#8B8B8B] w-16 h-2 mt-2 rounded-full"></span>
         <Headers />
-        <div className="text-white font-bold mt-[-10px] text-lg text-left border-[13px] border-transparent">
+        <div className="mt-[-10px] text-[#8B8B8B] font-barlow text-lg text-left border-[13px] border-transparent">
           Currently Playing:
         </div>
         <div>

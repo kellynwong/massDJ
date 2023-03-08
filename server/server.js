@@ -58,9 +58,9 @@ router.get("/auth/login", spotifyLogin); // need to add in authAdmin here later 
 router.get("/auth/token", spotifyToken);
 router.get("/auth/callback", spotifyCallback);
 // spotify
-router.get("/populate", authAdmin, playSong);
+router.get("/populate", playSong);
 router.put("/song", authAdmin, playSelectedSong);
-router.get("/pollqueue", playNextSongAtEndOfCurrentSong);
+router.get("/pollqueue", authAdmin, playNextSongAtEndOfCurrentSong); // if authAdmin, the next track will not play
 
 // playlist
 router.get("/playlist", authOptional, getPlaylist); // get songs

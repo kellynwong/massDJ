@@ -114,6 +114,7 @@ const playSong = async (req, res) => {
       title: item.track.name,
       artist: item.track.artists[0].name,
       trackUrl: item.track.uri,
+      count: 0,
     };
     seedSongs.push(song);
   }

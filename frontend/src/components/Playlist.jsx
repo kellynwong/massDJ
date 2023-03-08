@@ -40,28 +40,30 @@ function Playlist() {
   // Sends request periodically to evaluate progress of song currently playing
   useEffect(() => {
     const interval = setInterval(() => {
-      // console.log("This too shall run?");
-      const currentlyPlaying = async () => {
-        const requestOptions = {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${dataContext.userToken}`,
-          },
+      if (dataContext.user.isAdmin) {
+        // console.log("This too shall run?");
+        const currentlyPlaying = async () => {
+          const requestOptions = {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${dataContext.userToken}`,
+            },
+          };
+          const url = "http://localhost:4000/pollqueue";
+          const res = await fetch(url, requestOptions);
+          const currentSong = await res.json();
+          if (currentSong.duration_ms) {
+            setCurrentSong(currentSong);
+          }
         };
-        const url = "http://localhost:4000/pollqueue";
-        const res = await fetch(url, requestOptions);
-        const currentSong = await res.json();
-        if (currentSong.duration_ms) {
-          setCurrentSong(currentSong);
-        }
-      };
-      currentlyPlaying();
+        currentlyPlaying();
+      }
     }, 1000);
     return () => {
       clearInterval(interval);
     };
-  }, []);
+  }, [dataContext.user.isAdmin, dataContext.userToken]);
 
   const handleClick = async (e) => {
     let songId = e.target.value;
@@ -72,7 +74,7 @@ function Playlist() {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
-        // Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${dataContext.userToken}`,
       },
       body: JSON.stringify({
         id: songId,
@@ -126,8 +128,13 @@ function Playlist() {
                 </td>
 
                 <td className="w-1/6 h-1/6 pt-4">
-                  <button type="text" value={song._id} onClick={handleClick}>
-                    <div className="text-left">Play Now</div>
+                  <button
+                    type="text"
+                    value={song._id}
+                    onClick={handleClick}
+                    className="text-left"
+                  >
+                    Play Now
                   </button>
                 </td>
 
