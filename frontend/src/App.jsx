@@ -20,7 +20,7 @@ function App() {
   const [user, setUser] = useState("");
   const [current_track, setTrack] = useState(track);
 
-  // Get spotiify token
+  // Get spotify token
   useEffect(() => {
     async function getSpotifyToken() {
       const response = await fetch("/api/auth/token");
@@ -59,8 +59,8 @@ function App() {
         <span className="absolute ml-[168px] border border-[#8B8B8B] bg-[#8B8B8B] w-16 h-2 mt-2 rounded-full"></span>
         <Headers />
         {user.email ? (
-          <div className="mt-[-10px] text-[#8B8B8B] font-barlow text-lg text-left border-[13px] border-transparent">
-            Welcome {user.email}!
+          <div className="mt-[-45px] text-[#8B8B8B] font-barlow text-lg text-left border-[13px] border-transparent motion-safe:animate-fadeIn">
+            Welcome <span className="text-white">{user.email}</span>,
           </div>
         ) : null}
         <div>
@@ -72,7 +72,7 @@ function App() {
             ))}
         </div>
         <div>
-          <div>
+          <div className="mt-[-15px]">
             <Playlist />
           </div>
         </div>

@@ -88,7 +88,7 @@ function Playlist() {
             <img src={dataContext.current_track.album.images[0].url} alt="" />
           </div>
           <div className="mt-4 text-center">
-            <div className="font-bold">{dataContext.current_track.name}</div>
+            <div className="">{dataContext.current_track.name}</div>
             <div>{dataContext.current_track.artists[0].name}</div>
           </div>
         </div>
@@ -99,6 +99,7 @@ function Playlist() {
           <tr className="border-b border-[#8B8B8B]">
             <th className="pb-4">Title</th>
             <th className="pb-4"></th>
+            <th className="pb-4">Status</th>
             {dataContext.user.isAdmin && <th className="pb-4">Admin</th>}
             <th className="pb-4">#</th>
             <th className="pb-4">Vote</th>
@@ -111,9 +112,14 @@ function Playlist() {
                 <td className="w-1/6 h-1/6 pt-6 pr-2">
                   <img src={song.imgUrl} />
                 </td>
-                <td className="w-3/6 h-3/6 pt-6">
+                <td className="w-2/6 h-2/6 pt-6">
                   <div className="text-[#FEFEFE] font-bold"> {song.title}</div>
                   <div className="font-thin"> {song.artist}</div>
+                </td>
+                <td className="w-3/12 h-3/12 pt-4 pl-2">
+                  {index === 0 ? "Up Next" : null}
+                  {index === playlist.length - 1 ? "Currently Playing" : null}
+                  {index === playlist.length - 2 ? "Last Played" : null}
                 </td>
                 {dataContext.user.isAdmin && (
                   <td className="w-1/6 h-1/6 pt-4">
@@ -127,13 +133,11 @@ function Playlist() {
                     </button>
                   </td>
                 )}
-
                 <td className="w-1/6 h-1/6 pt-4">{song.count}</td>
-
                 {song.votedBefore ? (
-                  <div className="w-1/6 h-1/6 pt-8">NA</div>
+                  <div className="w-1/6 h-1/6 ml-2  mt-8">NA</div>
                 ) : (
-                  <td className="w-1/6 h-1/6 pt-6">
+                  <td className="w-1/6 h-1/6 pt-6 text-center">
                     <button onClick={() => handleChange(song._id, 1)}>+</button>
                     <br />
                     <button onClick={() => handleChange(song._id, -1)}>
