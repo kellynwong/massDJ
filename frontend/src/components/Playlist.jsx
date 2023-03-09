@@ -130,7 +130,6 @@ function Playlist() {
                 </td>
                 <td className="w-3/12 h-3/12 pt-4 pl-2 text-yellow-400">
                   {index === 0 ? "Up Next" : null}
-                  {song._id === currentSong._id ? "Currently Playing" : null}
                   {song._id === lastSong._id ? "Last Played" : null}
                 </td>
                 {dataContext.user.isAdmin && (

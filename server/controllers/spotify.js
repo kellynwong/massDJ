@@ -135,7 +135,7 @@ const populatePlaylist = async (req, res) => {
   url = `https://api.spotify.com/v1/users/${userID}/playlists`;
   const userPlaylistsResult = await fetch(url, requestOptions);
   const userPlaylistsResultJSON = await userPlaylistsResult.json();
-  const playlistId = userPlaylistsResultJSON.items[1].id;
+  const playlistId = userPlaylistsResultJSON.items[0].id;
 
   // console.log(userPlaylistsResultJSON);
 
@@ -160,6 +160,7 @@ const populatePlaylist = async (req, res) => {
     };
     seedSongs.push(song);
   }
+  await Playlist.remove({});
   await Playlist.insertMany(seedSongs);
   console.log("Seeded db with spotify playlist!");
 
@@ -242,7 +243,7 @@ const playNextSongAtEndOfCurrentSong = async (req, res) => {
       {},
       { sort: { lastPlayed: -1 } }
     );
-    const timeSinceLastSongMs = new Date() - lastSongPlayed.lastPlayed;
+    const timeSinceLastSongMs = new Date() - lastSongPlayed?.lastPlayed;
     // if the last played song was within 10s ago, don't play another song
     if (timeSinceLastSongMs > 10000) {
       await findNextVotedSong();
