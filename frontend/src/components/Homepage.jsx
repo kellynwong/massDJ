@@ -18,10 +18,12 @@ function Homepage() {
       <div>
         {dataContext.user.isAdmin ? (
           <div className="bg-[#181818] p-3 mt-[-10px]">
-            <QRCode
-              value={window.location.href}
-              className="w-24 h-24 mx-auto"
-            />
+            <div className="w-[100px] bg-white border-2 border-white mx-auto">
+              <QRCode
+                value={window.location.href}
+                className="w-24 h-24 mx-auto"
+              />
+            </div>
           </div>
         ) : null}
       </div>
