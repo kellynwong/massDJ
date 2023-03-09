@@ -8,18 +8,35 @@ connectDB();
 const main = async () => {
   const seedUsers = [
     {
-      email: "shilifang@hotmail.com",
+      email: "shilifang@gmail.com",
       password: "hotpotgood",
       isAdmin: true,
     },
     {
-      email: "merlin@gmail.com",
-      password: "countryroads",
+      email: "table41@gmail.com",
+      password: "takemehome",
+      isAdmin: true,
     },
-    { email: "lancelot@gmail.com", password: "roxyroxy" },
+    { email: "xiaohong@gmail.com", password: "takemehome" },
     {
-      email: "eggsy@gmail.com",
-      password: "funtimes",
+      email: "xiaobai@gmail.com",
+      password: "takemehome",
+    },
+    {
+      email: "xiaohei@gmail.com",
+      password: "takemehome",
+    },
+    {
+      email: "xiangjiao@gmail.com",
+      password: "takemehome",
+    },
+    {
+      email: "pingguo@gmail.com",
+      password: "takemehome",
+    },
+    {
+      email: "liulian@gmail.com",
+      password: "takemehome",
     },
     {
       email: "kellyn@gmail.com",

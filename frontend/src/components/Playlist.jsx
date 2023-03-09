@@ -116,7 +116,7 @@ function Playlist() {
                   <div className="text-[#FEFEFE] font-bold"> {song.title}</div>
                   <div className="font-thin"> {song.artist}</div>
                 </td>
-                <td className="w-3/12 h-3/12 pt-4 pl-2">
+                <td className="w-3/12 h-3/12 pt-4 pl-2 text-yellow-400">
                   {index === 0 ? "Up Next" : null}
                   {index === playlist.length - 1 ? "Currently Playing" : null}
                   {index === playlist.length - 2 ? "Last Played" : null}

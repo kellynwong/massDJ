@@ -155,11 +155,12 @@ const getUsersAdmin = async (req, res) => {
 // Update a user (authAdmin)
 // Take in an email and isAdmin boolean
 const updateUserAdmin = async (req, res) => {
-  const userEmail = req.body.email;
+  const email = req.body.email;
   const isAdmin = req.body.isAdmin;
-
+  console.log(email);
+  console.log(isAdmin);
   await Users.updateOne(
-    { _id: userEmail },
+    { email: email },
     {
       isAdmin: isAdmin,
     }

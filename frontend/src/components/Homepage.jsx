@@ -23,9 +23,12 @@ function Homepage() {
           ))}
       </div>
       <div>
-        <div className="mt-[-15px]">
-          <Playlist />
-        </div>
+        {dataContext.user.email || dataContext.user.isAdmin ? (
+          <div className="mt-[5px]"></div>
+        ) : (
+          <div className="mt-[-80px]"></div>
+        )}
+        <Playlist />
       </div>
     </div>
   );

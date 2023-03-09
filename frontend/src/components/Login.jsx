@@ -54,7 +54,7 @@ function Login() {
     const data = await res.json();
     dataContext.setUser(data.user);
     dataContext.setUserToken(data.access);
-    setTimeout(disappear, 1000);
+    setTimeout(disappear, 500);
     console.log("Logged in as " + data.access);
     if (data.message === "login failed" || data.message === "not authorised") {
       setLoginError(true);
@@ -68,7 +68,7 @@ function Login() {
   };
 
   return (
-    <div className="motion-safe:animate-fadeIn bg-[#FDFBF9] border-[1px] border-white rounded-2xl p-6 fixed top-[120px] w-11/12 right-4">
+    <div className="motion-safe:animate-fadeIn bg-[#FDFBF9] border-[1px] border-white rounded-2xl p-6 fixed top-[100px] w-11/12 right-4">
       <div className="text-[#25272C] font-poppins border-[13px] border-transparent">
         <form
           onSubmit={(e) => {

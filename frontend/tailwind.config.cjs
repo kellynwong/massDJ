@@ -15,8 +15,7 @@ module.exports = {
         poppins: ['"Poppins"'],
       },
       animation: {
-        fadeIn: "fadeIn 1s ease-in forwards",
-        bounceShort: "bounce 1s ease-in-out 2",
+        fadeIn: "fadeIn 0.5s ease-in forwards",
       },
       keyframes: {
         fadeIn: {
