@@ -4,6 +4,7 @@ import DataContext from "../context/DataContext";
 function Playlist() {
   const [playlist, setPlaylist] = useState([]);
   const [currentSong, setCurrentSong] = useState("");
+  const [lastSong, setLastSong] = useState("");
   const dataContext = useContext(DataContext);
 
   // Refresh page to update vote count and disable voting for songs user has voted for
@@ -15,7 +16,15 @@ function Playlist() {
         const playlist = await res.json();
         setPlaylist(playlist);
         if (playlist?.length > 0) {
-          setCurrentSong(playlist[playlist.length - 1]);
+          const playlistWithNoNegatives = playlist.filter((song) => {
+            return song.count >= 0;
+          });
+          const currentSong =
+            playlistWithNoNegatives[playlistWithNoNegatives.length - 1];
+          const lastSong =
+            playlistWithNoNegatives[playlistWithNoNegatives.length - 2];
+          setCurrentSong(currentSong);
+          setLastSong(lastSong);
         }
       };
       displaySongs();
@@ -121,8 +130,8 @@ function Playlist() {
                 </td>
                 <td className="w-3/12 h-3/12 pt-4 pl-2 text-yellow-400">
                   {index === 0 ? "Up Next" : null}
-                  {index === playlist.length - 1 ? "Currently Playing" : null}
-                  {index === playlist.length - 2 ? "Last Played" : null}
+                  {song._id === currentSong._id ? "Currently Playing" : null}
+                  {song._id === lastSong._id ? "Last Played" : null}
                 </td>
                 {dataContext.user.isAdmin && (
                   <td className="w-1/6 h-1/6 pt-4">

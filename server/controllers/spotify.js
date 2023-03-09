@@ -20,7 +20,7 @@ let generateRandomString = function (length) {
   return text;
 };
 
-// Login
+// Redirect the user to spotify to login
 const spotifyLogin = async (req, res) => {
   // allowable features from the requested token - what this access token can do
   var scope =
@@ -28,6 +28,7 @@ const spotifyLogin = async (req, res) => {
 
   var state = generateRandomString(16);
 
+  // Prepare the scope for requesting
   var auth_query_parameters = new URLSearchParams({
     response_type: "code",
     client_id: spotify_client_id,
@@ -41,10 +42,11 @@ const spotifyLogin = async (req, res) => {
   );
 };
 
-// Callback
+// After the user accepts on spotify then the user will be sent back to our app with the auth code
 const spotifyCallback = async (req, res) => {
   var code = req.query.code;
 
+  // Server can now ask for access token from spotify using the auth code
   var authOptions = {
     url: "https://accounts.spotify.com/api/token",
     form: {
@@ -64,10 +66,12 @@ const spotifyCallback = async (req, res) => {
   };
   request.post(authOptions, function (error, response, body) {
     if (!error && response.statusCode === 200) {
+      // Save and store access token and refresh token
       access_token = body.access_token;
       console.log("Got first access_token and refresh_token");
       refresh_token = body.refresh_token;
 
+      // Once we get the access token we will save it and redirect back to home page
       res.redirect("/");
     }
   });
@@ -152,6 +156,7 @@ const populatePlaylist = async (req, res) => {
       artist: item.track.artists[0].name,
       trackUrl: item.track.uri,
       count: 0,
+      lastPlayed: new Date(),
     };
     seedSongs.push(song);
   }
@@ -198,6 +203,7 @@ const playSelectedSong = async (req, res) => {
 let currentlyPlayingJSON;
 // Evaluate when current song is ending
 const playNextSongAtEndOfCurrentSong = async (req, res) => {
+  // Get the currently playing song
   url = "https://api.spotify.com/v1/me/player/currently-playing";
   playRequestOptions = {
     method: "GET",
@@ -217,6 +223,7 @@ const playNextSongAtEndOfCurrentSong = async (req, res) => {
 
   currentlyPlayingJSON = await currentlyPlayingResponse.json();
 
+  // Find the state of the song
   const progress_ms = currentlyPlayingJSON.progress_ms;
   const duration_ms = currentlyPlayingJSON.item?.duration_ms;
   const is_playing = currentlyPlayingJSON.is_playing;
@@ -226,14 +233,17 @@ const playNextSongAtEndOfCurrentSong = async (req, res) => {
     `Song: ${name} - ${progress_ms}/${duration_ms} is_playing: ${is_playing}`
   );
 
+  // If the song is coming to an end or has ended then we want to play the next song
   if (duration_ms - progress_ms < 2000 || is_playing === false) {
-    // if the last played song was within 10s ago, don't play another song
+    // Sometimes the new song is still loading
+    // Guard that we don't play another song while it is loading by checking that we didn't play a song in the last few seconds
     const lastSongPlayed = await Playlist.findOne(
       {},
       {},
       { sort: { lastPlayed: -1 } }
     );
     const timeSinceLastSongMs = new Date() - lastSongPlayed.lastPlayed;
+    // if the last played song was within 10s ago, don't play another song
     if (timeSinceLastSongMs > 10000) {
       await findNextVotedSong();
       res.status(200).json({ status: "ok", message: "played successfully" });
@@ -248,6 +258,7 @@ const playNextSongAtEndOfCurrentSong = async (req, res) => {
 
 // Find next voted song
 const findNextVotedSong = async () => {
+  // Find the next highest voted song
   const songs = await Playlist.find(
     {},
     {},
@@ -261,7 +272,10 @@ const findNextVotedSong = async () => {
       mostVotedSongTrackUrl = songs[x].trackUrl;
     }
   }
+  // Play the song that was found
   await playNextMostVotedSong(mostVotedSongTrackUrl);
+
+  // Update the song to reset the vote count
   await Playlist.updateOne(
     { trackUrl: mostVotedSongTrackUrl },
     {

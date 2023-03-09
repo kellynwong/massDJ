@@ -36,6 +36,7 @@ const getPlaylist = async (req, res) => {
 
 // When user clicks on vote
 const voteSong = async (req, res) => {
+  // Identify the user by their email (if present) or else machine Id
   let identifier;
   if (req.userEmail) {
     identifier = req.userEmail;
@@ -43,17 +44,19 @@ const voteSong = async (req, res) => {
     identifier = req.cookies.machineId;
   }
 
+  // Check if they voted on this song before
   const voteBefore = await Playlist.findOne({
     _id: req.body.id,
     votedBy: identifier,
   });
-
   if (voteBefore) {
+    // Not allowed to vote twice
     res.status(400).json({ status: "error", message: "voted before" });
     return;
   }
 
   try {
+    // Update the count to add the vote
     await Playlist.updateOne(
       { _id: req.body.id },
       {
@@ -67,6 +70,7 @@ const voteSong = async (req, res) => {
     );
 
     if (req.userEmail) {
+      // If the user is logged in then add a record to their account history
       const song = await Playlist.findOne({
         _id: req.body.id,
       });
