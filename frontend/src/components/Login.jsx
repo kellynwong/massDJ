@@ -59,6 +59,7 @@ function Login() {
 
       console.log("Logged in as " + data.access);
       setLoginSuccess(true);
+      window.location.href = "/";
     }
     setTimeout(disappear, 500);
   };

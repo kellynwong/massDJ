@@ -24,13 +24,6 @@ function App() {
 
   // Get spotify token
   useEffect(() => {
-    async function getSpotifyToken() {
-      const response = await fetch("/api/auth/token");
-      const json = await response.json();
-      setSpotifyToken(json.access_token);
-    }
-    getSpotifyToken();
-
     async function getUser() {
       try {
         const response = await fetch("/api/users/profile");
@@ -41,7 +34,13 @@ function App() {
       }
     }
     getUser();
-  }, []);
+    async function getSpotifyToken() {
+      const response = await fetch("/api/auth/token");
+      const json = await response.json();
+      setSpotifyToken(json.access_token);
+    }
+    getSpotifyToken();
+  }, [userToken]);
 
   return (
     <DataContext.Provider
