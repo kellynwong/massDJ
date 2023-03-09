@@ -10,9 +10,7 @@ const createUser = async (req, res) => {
     const user = await Users.findOne({ email: req.body.email });
     if (user) {
       // remove !user
-      return res
-        .status(400)
-        .json({ status: "error", message: "duplicate username" });
+      return login(req, res);
     }
     const hash = await bcrypt.hash(req.body.password, 12);
     const createdUser = await Users.create({

@@ -146,6 +146,17 @@ const playSelectedSong = async (req, res) => {
     }),
   };
   const song = await fetch(url, playRequestOptions);
+
+  await Playlist.updateOne(
+    { trackUrl: track.trackUrl },
+    {
+      $set: {
+        lastPlayed: new Date(),
+        count: 0,
+        votedBy: [],
+      },
+    }
+  );
   res.status(200).json({ track });
 };
 

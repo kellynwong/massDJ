@@ -1,23 +1,11 @@
 import React, { useState, useEffect, useContext } from "react";
 import DataContext from "../context/DataContext";
 import { RiSkipForwardLine } from "react-icons/ri";
-import { RiSkipBackLine } from "react-icons/ri";
-import { RiPlayCircleLine } from "react-icons/ri";
-import { RiPauseCircleLine } from "react-icons/ri";
-
-// const track = {
-//   name: "",
-//   album: {
-//     images: [{ url: "" }],
-//   },
-//   artists: [{ name: "" }],
-// };
 
 function SpotifyPlayer(props) {
   const [is_paused, setPaused] = useState(false);
   const [is_active, setActive] = useState(false);
   const [player, setPlayer] = useState(undefined);
-  // const [current_track, setTrack] = useState(track);
   const dataContext = useContext(DataContext);
 
   useEffect(() => {
@@ -53,6 +41,7 @@ function SpotifyPlayer(props) {
             play: true,
           }),
         };
+        console.log(requestOptions);
         const resp = await fetch(url, requestOptions);
       });
 
@@ -97,7 +86,7 @@ function SpotifyPlayer(props) {
           <div className="ml-7">
             <img src={dataContext.current_track.album.images[0].url} alt="" />
 
-            <div className="mt-4 ml-[-10px] text-center">
+            <div className="mt-4 ml-[-25px] text-center">
               <div className="font-bold">{dataContext.current_track.name}</div>
               <div>{dataContext.current_track.artists[0].name}</div>
 

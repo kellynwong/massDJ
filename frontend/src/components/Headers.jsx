@@ -2,6 +2,7 @@ import { data } from "autoprefixer";
 import React, { useContext } from "react";
 import DataContext from "../context/DataContext";
 import Login from "./Login";
+import { Link } from "react-router-dom";
 
 const Headers = () => {
   const dataContext = useContext(DataContext);
@@ -17,39 +18,52 @@ const Headers = () => {
     dataContext.setUser("");
   };
 
+  const goHome = () => {
+    window.location.href = "/";
+  };
+
   return (
     <>
       <div className="inline-flex">
         {/* massDJ logo */}
-        {dataContext.user.isAdmin ? (
-          <div>
-            <img className="w-28 h-28 ml-2" src="/src/assets/massDJadmin.png" />
-          </div>
-        ) : (
-          <div>
-            <img className="w-28 h-28 ml-2" src="/src/assets/massDJ.png" />
-          </div>
-        )}
+        <div onClick={goHome}>
+          {dataContext.user.isAdmin ? (
+            <div>
+              <img
+                className="w-28 h-28 ml-2"
+                src="/src/assets/massDJadmin.png"
+              />
+            </div>
+          ) : (
+            <div>
+              <img className="w-28 h-28 ml-2" src="/src/assets/massDJ.png" />
+            </div>
+          )}
+        </div>
 
         {/* Manage logo for Admin*/}
         <div className="ml-32">
           {dataContext.user.isAdmin && (
-            <div>
-              <img
-                className="w-16 h-16 mt-2"
-                src="/src/assets/manageAdmin.png"
-              />
-            </div>
+            <Link to="manage">
+              <div>
+                <img
+                  className="w-16 h-16 mt-2"
+                  src="/src/assets/manageAdmin.png"
+                />
+              </div>
+            </Link>
           )}
 
           {/* History logo for User*/}
           {dataContext.user.email && !dataContext.user.isAdmin && (
-            <div>
-              <img
-                className="w-16 h-16 mt-2"
-                src="/src/assets/historyUser.png"
-              />
-            </div>
+            <Link to="history">
+              <div>
+                <img
+                  className="w-16 h-16 mt-2"
+                  src="/src/assets/historyUser.png"
+                />
+              </div>
+            </Link>
           )}
         </div>
 

@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
 import DataContext from "./context/DataContext";
-import SpotifyLogin from "./components/SpotifyLogin";
-import SpotifyPlayer from "./components/SpotifyPlayer";
-import Playlist from "./components/Playlist";
+import Homepage from "./components/Homepage";
+import Manage from "./components/Manage";
+import History from "./components/History";
 import Headers from "./components/Headers";
+import { Route, Routes } from "react-router-dom";
+import { BrowserRouter } from "react-router-dom";
 
 const track = {
   name: "",
@@ -44,6 +46,7 @@ function App() {
   return (
     <DataContext.Provider
       value={{
+        spotifyToken,
         setSpotifyToken,
         userToken,
         setUserToken,
@@ -57,25 +60,14 @@ function App() {
     >
       <div className="bg-[#181818] rounded-3xl border-transparent border-4 relative">
         <span className="absolute ml-[168px] border border-[#8B8B8B] bg-[#8B8B8B] w-16 h-2 mt-2 rounded-full"></span>
-        <Headers />
-        {user.email ? (
-          <div className="mt-[-45px] text-[#8B8B8B] font-barlow text-lg text-left border-[13px] border-transparent motion-safe:animate-fadeIn">
-            Welcome <span className="text-white">{user.email}</span>,
-          </div>
-        ) : null}
-        <div>
-          {user.isAdmin &&
-            (spotifyToken === "" ? (
-              <SpotifyLogin />
-            ) : (
-              <SpotifyPlayer token={spotifyToken} />
-            ))}
-        </div>
-        <div>
-          <div className="mt-[-15px]">
-            <Playlist />
-          </div>
-        </div>
+        <BrowserRouter>
+          <Headers />
+          <Routes>
+            <Route path="/" element={<Homepage />} />
+            <Route path="/manage" element={<Manage />} />
+            <Route path="/history" element={<History />} />
+          </Routes>
+        </BrowserRouter>
       </div>
     </DataContext.Provider>
   );

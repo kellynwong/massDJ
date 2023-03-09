@@ -127,7 +127,7 @@ function Playlist() {
                       type="text"
                       value={song._id}
                       onClick={handleClick}
-                      className="text-left"
+                      className="text-left pl-2"
                     >
                       Play Now
                     </button>
