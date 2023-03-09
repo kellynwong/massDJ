@@ -27,13 +27,13 @@ function Login() {
     const res = await fetch(url, requestOptions);
     const data = await res.json();
     dataContext.setFormIsOpen(false);
-    if (
-      data.message === "duplicated email" ||
-      data.message === "an error has occurred"
-    ) {
+
+    if (data.message === "an error has occurred") {
       setSignupError(true);
     } else {
       setSignupSuccess(true);
+      dataContext.setUser(data.user);
+      dataContext.setUserToken(data.access);
     }
   };
 
@@ -43,7 +43,6 @@ function Login() {
     setSignupError(false);
     setLoginSuccess(false);
     setLoginError(false);
-    console.log(JSON.stringify({ email, password }));
     const requestOptions = {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -52,15 +51,16 @@ function Login() {
     const url = "/api/users/login";
     const res = await fetch(url, requestOptions);
     const data = await res.json();
-    dataContext.setUser(data.user);
-    dataContext.setUserToken(data.access);
-    setTimeout(disappear, 500);
-    console.log("Logged in as " + data.access);
     if (data.message === "login failed" || data.message === "not authorised") {
       setLoginError(true);
     } else {
+      dataContext.setUser(data.user);
+      dataContext.setUserToken(data.access);
+
+      console.log("Logged in as " + data.access);
       setLoginSuccess(true);
     }
+    setTimeout(disappear, 500);
   };
 
   const disappear = () => {
@@ -68,7 +68,10 @@ function Login() {
   };
 
   return (
-    <div className="motion-safe:animate-fadeIn bg-[#FDFBF9] border-[1px] border-white rounded-2xl p-6 fixed top-[100px] w-11/12 right-4">
+    <div
+      className="motion-safe:animate-fadeIn bg-[#FDFBF9] border-[1px] border-white rounded-2xl p-6 fixed top-[70px] w-11/12 right-4"
+      style={{ zIndex: "2" }}
+    >
       <div className="text-[#25272C] font-poppins border-[13px] border-transparent">
         <form
           onSubmit={(e) => {

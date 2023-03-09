@@ -11,11 +11,8 @@ const createUser = async (req, res) => {
     if (user) {
       return login(req, res);
     }
-    console.log("here");
-    console.log(req.body.email);
-    console.log(process.env.SPOTIFY_CLIENT_ID);
     const hash = await bcrypt.hash(req.body.password, 12);
-    const createdUser = await Users.create({
+    await Users.create({
       email: req.body.email,
       hash,
     });

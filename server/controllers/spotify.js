@@ -4,6 +4,8 @@ const request = require("request");
 
 let userPlaylistSongsJSON;
 let access_token = "";
+let refresh_token = "";
+
 var spotify_client_id = process.env.SPOTIFY_CLIENT_ID;
 var spotify_client_secret = process.env.SPOTIFY_CLIENT_SECRET;
 
@@ -63,17 +65,48 @@ const spotifyCallback = async (req, res) => {
   request.post(authOptions, function (error, response, body) {
     if (!error && response.statusCode === 200) {
       access_token = body.access_token;
-      console.log(access_token);
+      console.log("Got first access_token and refresh_token");
+      refresh_token = body.refresh_token;
 
       res.redirect("/");
     }
   });
 };
 
+const refreshToken = async () => {
+  const data = new URLSearchParams();
+  data.append("grant_type", "refresh_token");
+  data.append("refresh_token", refresh_token);
+
+  var authOptions = {
+    method: "POST",
+    headers: {
+      Authorization:
+        "Basic " +
+        Buffer.from(spotify_client_id + ":" + spotify_client_secret).toString(
+          "base64"
+        ),
+      "Content-Type": "application/x-www-form-urlencoded",
+    },
+    body: data,
+    json: true,
+  };
+
+  const response = await fetch(
+    "https://accounts.spotify.com/api/token",
+    authOptions
+  );
+
+  const responseJSON = await response.json();
+  access_token = responseJSON.access_token;
+};
+
 // Token
 const spotifyToken = async (req, res) => {
-  if (!access_token) {
+  if (refresh_token) {
+    await refreshToken();
   }
+
   res.json({
     access_token: access_token,
   });

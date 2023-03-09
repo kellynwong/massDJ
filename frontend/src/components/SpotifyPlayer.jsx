@@ -41,7 +41,6 @@ function SpotifyPlayer(props) {
             play: true,
           }),
         };
-        console.log(requestOptions);
         const resp = await fetch(url, requestOptions);
       });
 
@@ -71,7 +70,7 @@ function SpotifyPlayer(props) {
       <>
         <div>
           <div>
-            <b>
+            <b className="text-[#181818]">
               {" "}
               Instance not active. Transfer your playback using your Spotify app{" "}
             </b>
@@ -82,7 +81,7 @@ function SpotifyPlayer(props) {
   } else {
     return (
       <>
-        <div className="border-[13px] border-transparent font-barlow text-[15px] text-[#8B8B8B] ">
+        <div className="border-[13px] border-transparent font-barlow text-[15px] text-[#8B8B8B] mb-[-80px]">
           <div className="ml-7">
             <img src={dataContext.current_track.album.images[0].url} alt="" />
 

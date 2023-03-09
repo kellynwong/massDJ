@@ -67,7 +67,7 @@ const Manage = () => {
           <tr className="border-b border-[#8B8B8B]">
             <th className="pb-4">Email</th>
             <th className="pb-4">Admin</th>
-            <th className="pb-4">Promote</th>
+            <th className="pb-4 pl-4">Promote</th>
             <th className="pb-4">Delete</th>
           </tr>
         </thead>
@@ -83,7 +83,7 @@ const Manage = () => {
                     "No"
                   )}
                 </td>
-                <td className="w-2/6 h-2/6">
+                <td className="w-2/6 h-2/6 pl-4">
                   {user.isAdmin ? (
                     <button
                       className="pt-6 text-red-400"
@@ -104,7 +104,7 @@ const Manage = () => {
                     </button>
                   )}
                 </td>
-                <td>
+                <td className="w-2/6 h-2/6">
                   <button
                     className="pt-6"
                     onClick={handleDelete}

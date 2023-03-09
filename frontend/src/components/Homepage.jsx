@@ -11,14 +11,19 @@ function Homepage() {
   return (
     <div>
       {dataContext.user.email ? (
-        <div className="mt-[-45px] text-[#8B8B8B] font-barlow text-lg text-left border-[13px] border-transparent motion-safe:animate-fadeIn">
+        <div className="mt-[-45px] mb-[-15px] text-[#8B8B8B] font-barlow text-lg text-left border-[13px] border-transparent motion-safe:animate-fadeIn">
           Welcome <span className="text-white">{dataContext.user.email}</span>,
         </div>
       ) : null}
       <div>
-        <div style={{ background: "white", padding: "16px" }}>
-          <QRCode value={window.location.href} />
-        </div>
+        {dataContext.user.isAdmin ? (
+          <div className="bg-[#181818] p-3 mt-[-10px]">
+            <QRCode
+              value={window.location.href}
+              className="w-24 h-24 mx-auto"
+            />
+          </div>
+        ) : null}
       </div>
       <div>
         {dataContext.user.isAdmin &&

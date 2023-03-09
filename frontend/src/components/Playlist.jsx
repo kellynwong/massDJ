@@ -83,16 +83,16 @@ function Playlist() {
   };
 
   return (
-    <div className="border-[13px] border-transparent">
+    <div className="border-[13px] border-transparent mt-16">
       {/* Show currently playing song to users (no controls)*/}
       {dataContext.user.isAdmin ? null : (
-        <div className="border-[13px] border-transparent font-barlow text-[15px] text-[#8B8B8B]">
-          <div className="ml-4">
+        <div className="border-[13px] border-transparent font-barlow text-[15px] text-[#8B8B8B] mt-[-40px]">
+          <div className="mx-auto">
             <img src={currentSong.imgUrl} alt="" />
           </div>
           <div className="mt-4 text-center">
-            <div className="">{currentSong.title}</div>
-            <div>{currentSong.artist}</div>
+            <div>{currentSong.title}</div>
+            <div className="mb-8">{currentSong.artist}</div>
           </div>
         </div>
       )}

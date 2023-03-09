@@ -1,4 +1,3 @@
-import { data } from "autoprefixer";
 import React, { useContext } from "react";
 import DataContext from "../context/DataContext";
 import Login from "./Login";
@@ -16,6 +15,7 @@ const Headers = () => {
   const handleLogout = async () => {
     await fetch("/api/users/logout", { method: "POST" });
     dataContext.setUser("");
+    window.location.href = "/";
   };
 
   const goHome = () => {
@@ -42,7 +42,7 @@ const Headers = () => {
         </div>
 
         {/* Manage logo for Admin*/}
-        <div className="ml-32">
+        <div className="ml-36 mr-[-10px]">
           {dataContext.user.isAdmin && (
             <Link to="manage">
               <div>

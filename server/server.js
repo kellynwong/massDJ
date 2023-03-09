@@ -6,6 +6,9 @@ const connectDB = require("./db/db");
 const router = express.Router();
 const port = 4000;
 
+const fetch = require("cross-fetch");
+globalThis.fetch = fetch;
+
 const {
   login,
   logout,
@@ -42,6 +45,14 @@ connectDB();
 
 app.use("/", router);
 
+const testHandler = (req, res) => {
+  res.json({ status: "online" });
+};
+
+// health checks
+router.get("/", testHandler);
+router.get("/api", testHandler);
+
 // users
 router.post("/api/users", createUser);
 router.post("/api/users/login", login);
@@ -55,7 +66,7 @@ router.get("/api/admin/users", authAdmin, getUsersAdmin);
 router.put("/api/admin/users", authAdmin, updateUserAdmin);
 router.delete("/api/admin/users", authAdmin, deleteUser);
 router.get("/api/auth/login", authAdmin, spotifyLogin);
-router.get("/api/auth/token", spotifyToken);
+router.get("/api/auth/token", authAdmin, spotifyToken);
 router.get("/api/auth/callback", spotifyCallback);
 // spotify
 router.get("/api/populate", populatePlaylist);
