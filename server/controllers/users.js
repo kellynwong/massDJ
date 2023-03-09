@@ -9,9 +9,11 @@ const createUser = async (req, res) => {
   try {
     const user = await Users.findOne({ email: req.body.email });
     if (user) {
-      // remove !user
       return login(req, res);
     }
+    console.log("here");
+    console.log(req.body.email);
+    console.log(process.env.SPOTIFY_CLIENT_ID);
     const hash = await bcrypt.hash(req.body.password, 12);
     const createdUser = await Users.create({
       email: req.body.email,

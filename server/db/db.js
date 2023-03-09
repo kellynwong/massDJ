@@ -1,9 +1,10 @@
 const mongoose = require("mongoose");
 
-const db = "mongodb://127.0.0.1:27017/massDJ";
+require("dotenv").config();
 
 const connectDB = async () => {
   try {
+    const db = process.env.MONGODB_URI;
     await mongoose.connect(db);
     console.log("DB connected");
   } catch (err) {

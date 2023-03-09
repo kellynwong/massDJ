@@ -98,7 +98,9 @@ const populatePlaylist = async (req, res) => {
   url = `https://api.spotify.com/v1/users/${userID}/playlists`;
   const userPlaylistsResult = await fetch(url, requestOptions);
   const userPlaylistsResultJSON = await userPlaylistsResult.json();
-  const playlistId = userPlaylistsResultJSON.items[0].id;
+  const playlistId = userPlaylistsResultJSON.items[1].id;
+
+  // console.log(userPlaylistsResultJSON);
 
   // Get playlist items here using playlist id from above
   url = `https://api.spotify.com/v1/playlists/${playlistId}/tracks`;
