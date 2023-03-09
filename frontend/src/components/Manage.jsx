@@ -1,7 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect, useContext } from "react";
+import DataContext from "../context/DataContext";
 
 const Manage = () => {
   const [listOfUsers, setListOfUsers] = useState([]);
+  const dataContext = useContext(DataContext);
 
   // Get all users (include admin)
   const getUsers = async () => {
@@ -23,23 +25,39 @@ const Manage = () => {
     const res = await fetch(url, requestOptions);
     const resJSON = await res.json();
     getUsers();
-    console.log(resJSON);
+    if (updatedUser.email === dataContext.user.email) {
+      // if the user demoted
+      window.location.href = "/";
+    }
   };
 
   const handleClick = (e) => {
     const email = e.target.id;
     const isAdmin = e.target.value === "true" ? false : true;
 
-    console.log(email);
-    console.log(e.target.value);
-    console.log(isAdmin);
-    console.log(typeof e.target.value);
     e.preventDefault();
     const updatedUser = {
       email: email,
       isAdmin: isAdmin,
     };
     updateAdmin(updatedUser);
+  };
+
+  const handleDelete = async (e) => {
+    const email = e.target.value;
+    e.preventDefault();
+
+    const requestOptions = {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        email: email,
+      }),
+    };
+    const url = "/api/admin/users";
+    const res = await fetch(url, requestOptions);
+    await res.json();
+    getUsers();
   };
 
   return (
@@ -49,7 +67,8 @@ const Manage = () => {
           <tr className="border-b border-[#8B8B8B]">
             <th className="pb-4">Email</th>
             <th className="pb-4">Admin</th>
-            <th className="pb-4">Action</th>
+            <th className="pb-4">Promote</th>
+            <th className="pb-4">Delete</th>
           </tr>
         </thead>
         <tbody>
@@ -72,7 +91,7 @@ const Manage = () => {
                       id={user.email}
                       value={user.isAdmin}
                     >
-                      Remove as Admin
+                      Demote
                     </button>
                   ) : (
                     <button
@@ -81,9 +100,18 @@ const Manage = () => {
                       id={user.email}
                       value={user.isAdmin}
                     >
-                      Promote to Admin
+                      Promote
                     </button>
                   )}
+                </td>
+                <td>
+                  <button
+                    className="pt-6"
+                    onClick={handleDelete}
+                    value={user.email}
+                  >
+                    Delete
+                  </button>
                 </td>
               </tr>
             );

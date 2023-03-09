@@ -1,5 +1,6 @@
 require("dotenv").config();
 const Playlist = require("../models/playlist");
+const AccountHistory = require("../models/accountHistory");
 const uuid = require("uuid");
 
 // to load songs at homepage, and when loads, assign a cookie if cookie does not exist
@@ -34,7 +35,7 @@ const getPlaylist = async (req, res) => {
 };
 
 // When user clicks on vote
-const updatePlaylist = async (req, res) => {
+const voteSong = async (req, res) => {
   let identifier;
   if (req.userEmail) {
     identifier = req.userEmail;
@@ -53,7 +54,7 @@ const updatePlaylist = async (req, res) => {
   }
 
   try {
-    const response = await Playlist.updateOne(
+    await Playlist.updateOne(
       { _id: req.body.id },
       {
         $inc: {
@@ -65,6 +66,20 @@ const updatePlaylist = async (req, res) => {
       }
     );
 
+    if (req.userEmail) {
+      const song = await Playlist.findOne({
+        _id: req.body.id,
+      });
+      await AccountHistory.create({
+        restaurant: "Table 41",
+        email: req.userEmail,
+        imgUrl: song.imgUrl,
+        title: song.title,
+        artist: song.artist,
+        vote: req.body.vote,
+      });
+    }
+
     res.json({ status: "ok", message: "updated" });
   } catch (error) {
     res.status(400).json({ status: "error", message: error.message });
@@ -73,5 +88,5 @@ const updatePlaylist = async (req, res) => {
 
 module.exports = {
   getPlaylist,
-  updatePlaylist,
+  voteSong,
 };

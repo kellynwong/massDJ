@@ -21,6 +21,15 @@ function App() {
   const [formIsOpen, setFormIsOpen] = useState(false);
   const [user, setUser] = useState("");
   const [current_track, setTrack] = useState(track);
+  const [history, setHistory] = useState([
+    // {
+    //   title: "",
+    //   artist: "",
+    //   vote: 0,
+    //   restaurant: "",
+    //    date: ""
+    // },
+  ]);
 
   // Get spotify token
   useEffect(() => {
@@ -56,6 +65,8 @@ function App() {
         setUser,
         current_track,
         setTrack,
+        history,
+        setHistory,
       }}
     >
       <div className="bg-[#181818] rounded-3xl border-transparent border-4 relative">

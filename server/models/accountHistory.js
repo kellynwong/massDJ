@@ -6,6 +6,8 @@ const AccountHistorySchema = new mongoose.Schema(
     title: { type: String },
     artist: { type: String },
     restaurant: { type: String },
+    vote: { type: Number },
+    imgUrl: { type: String },
   },
   { timestamps: true }
 );

@@ -28,7 +28,7 @@ const {
   playNextSongAtEndOfCurrentSong,
 } = require("./controllers/spotify");
 
-const { getPlaylist, updatePlaylist } = require("./controllers/playlist");
+const { getPlaylist, voteSong } = require("./controllers/playlist");
 
 const { getAccountHistory } = require("./controllers/accountHistory");
 const { auth, authAdmin, authOptional } = require("./middleware/auth");
@@ -46,7 +46,7 @@ app.use("/", router);
 
 // users
 router.post("/api/users", createUser);
-router.post("/api/users/login", login); // for admin to log in now (combined database now with a flag showing whether isAdmin (boolean))
+router.post("/api/users/login", login);
 router.post("/api/users/refresh", refresh);
 router.get("/api/users/profile", auth, getUser);
 router.delete("/api/users", auth, deleteUser);
@@ -56,17 +56,17 @@ router.post("/api/users/logout", auth, logout);
 router.get("/api/admin/users", authAdmin, getUsersAdmin);
 router.put("/api/admin/users", authAdmin, updateUserAdmin);
 router.delete("/api/admin/users", authAdmin, deleteUser);
-router.get("/api/auth/login", spotifyLogin); // need to add in authAdmin here later (Wednesday)
+router.get("/api/auth/login", authAdmin, spotifyLogin);
 router.get("/api/auth/token", spotifyToken);
 router.get("/api/auth/callback", spotifyCallback);
 // spotify
 router.get("/api/populate", populatePlaylist);
 router.put("/api/song", authAdmin, playSelectedSong);
-router.get("/api/pollqueue", authAdmin, playNextSongAtEndOfCurrentSong); // if authAdmin, the next track will not play
+router.get("/api/pollqueue", authAdmin, playNextSongAtEndOfCurrentSong);
 
 // playlist
 router.get("/api/playlist", authOptional, getPlaylist); // get songs
-router.put("/api/playlist", authOptional, updatePlaylist); // for voting
+router.put("/api/playlist", authOptional, voteSong); // for voting
 
 // accounthistory
 router.get("/api/accounthistory", auth, getAccountHistory);

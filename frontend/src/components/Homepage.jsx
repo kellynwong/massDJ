@@ -3,6 +3,7 @@ import DataContext from "../context/DataContext";
 import SpotifyLogin from "./SpotifyLogin";
 import SpotifyPlayer from "./SpotifyPlayer";
 import Playlist from "./Playlist";
+import QRCode from "react-qr-code";
 
 function Homepage() {
   const dataContext = useContext(DataContext);
@@ -14,6 +15,11 @@ function Homepage() {
           Welcome <span className="text-white">{dataContext.user.email}</span>,
         </div>
       ) : null}
+      <div>
+        <div style={{ background: "white", padding: "16px" }}>
+          <QRCode value={window.location.href} />
+        </div>
+      </div>
       <div>
         {dataContext.user.isAdmin &&
           (dataContext.spotifyToken === "" ? (

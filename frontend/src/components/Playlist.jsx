@@ -14,6 +14,9 @@ function Playlist() {
         const res = await fetch("/api/playlist");
         const playlist = await res.json();
         setPlaylist(playlist);
+        if (playlist?.length > 0) {
+          setCurrentSong(playlist[playlist.length - 1]);
+        }
       };
       displaySongs();
     }, 1000);
@@ -63,6 +66,7 @@ function Playlist() {
     await res.json();
   };
 
+  // Voting
   const handleChange = async (id, voting) => {
     const requestOptions = {
       method: "PUT",
@@ -76,7 +80,6 @@ function Playlist() {
     };
     const url = "/api/playlist";
     const res = await fetch(url, requestOptions);
-    const vote = await res.json();
   };
 
   return (
@@ -85,11 +88,11 @@ function Playlist() {
       {dataContext.user.isAdmin ? null : (
         <div className="border-[13px] border-transparent font-barlow text-[15px] text-[#8B8B8B]">
           <div className="ml-4">
-            <img src={dataContext.current_track.album.images[0].url} alt="" />
+            <img src={currentSong.imgUrl} alt="" />
           </div>
           <div className="mt-4 text-center">
-            <div className="">{dataContext.current_track.name}</div>
-            <div>{dataContext.current_track.artists[0].name}</div>
+            <div className="">{currentSong.title}</div>
+            <div>{currentSong.artist}</div>
           </div>
         </div>
       )}
