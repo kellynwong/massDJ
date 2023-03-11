@@ -14,10 +14,10 @@ Solution: This app will ideally allow a dine in customer to scan a QR code, and 
 8. Conduct end to end quality assurance testing.
 
 ## Technologies used
-Front end: React (framework to build out front end), vite, moment, react-qr-code
-Server: NodeJS, Express (web application framework), Spotify SDK, JWT
-Back end: Mongo (non-relational document database that provides support for JSON-like storage)
-Tailwind for CSS styling
+1. Front end: React (framework to build out front end), vite, moment, react-qr-code
+2. Server: NodeJS, Express (web application framework), Spotify SDK, JWT
+3. Back end: Mongo (non-relational document database that provides support for JSON-like storage)
+4. Tailwind for CSS styling
 
 ## Installation instructions
 1. Clone or fork this repository [massDJ] (https://github.com/kellynwong/massDJ).
