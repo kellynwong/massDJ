@@ -20,8 +20,8 @@ Solution: This app will ideally allow a dine in customer to scan a QR code, and 
 4. Tailwind for CSS styling
 
 ## Installation instructions
-1. Clone or fork this repository [massDJ] (https://github.com/kellynwong/massDJ).
-2. Install dependencies, refer to [dependencies] (https://github.com/kellynwong/massDJ/blob/main/frontend/package.json) and (https://github.com/kellynwong/massDJ/blob/main/server/package.json) 
+1. Clone or fork this repository [massDJ](https://github.com/kellynwong/massDJ).
+2. Install dependencies, refer to front end [dependencies](https://github.com/kellynwong/massDJ/blob/main/frontend/package.json) and back end [dependencies](https://github.com/kellynwong/massDJ/blob/main/server/package.json). 
 3. Run the application by running both front end and server using `npm run dev`.
 
 ## Wireframe
