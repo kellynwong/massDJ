@@ -3,9 +3,26 @@ Problem: Whenever I dine out with my family and friends, the songs being played 
 
 Solution: This app will ideally allow a dine in customer to scan a QR code, and he/she will be brought to the homepage of massDJ. The homepage will list out songs which will allow a customer to upvote or downvote for. The song with the most votes will be played next automatically over the restaurant's speakers. 
 
+## General approach
+1. List out a list of features I would like if I were to be able to use the app in a restaurant.
+2. Solicit feedback from family and friends and iterate on the features the app should have.
+3. Draw out wireframe to help visualise the front end.
+4. Create server and endpoints based on the various sets of users and features I would like to have.
+5. Test out each endpoint using Postman.
+6. Create front end and apply styling.
+7. Integrate front end and back end endpoints with testing.
+8. Conduct end to end quality assurance testing.
+
 ## Technologies used
-Mongo, Express, React and Node (MERN)
+Front end: React (framework to build out front end), vite, moment, react-qr-code
+Server: NodeJS, Express (web application framework), Spotify SDK, JWT
+Back end: Mongo (non-relational document database that provides support for JSON-like storage)
 Tailwind for CSS styling
+
+## Installation instructions
+1. Clone or fork this repository [massDJ] (https://github.com/kellynwong/massDJ).
+2. Install dependencies, refer to [dependencies] (https://github.com/kellynwong/massDJ/blob/main/frontend/package.json) and (https://github.com/kellynwong/massDJ/blob/main/server/package.json) 
+3. Run the application by running both front end and server using `npm run dev`.
 
 ## Wireframe
 ![Wireframe - User](https://github.com/kellynwong/massDJ/blob/main/frontend/src/assets/User.png)
